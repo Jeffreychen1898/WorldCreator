@@ -4,6 +4,11 @@ A simple program to create a 3d world using
 
 
 
+## Compiling
+	May need to install glfw3 using
+		``` sudo apt-get install libglfw3 libglfw3-lib ```
+
+
 ## In Progress
 
 * Create the Project
