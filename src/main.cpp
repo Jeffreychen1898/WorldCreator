@@ -1,7 +1,35 @@
 #include <iostream>
+#include <fstream>
 
 #include <glad.h>
 #include <GLFW/glfw3.h>
+
+static std::string readFile(const char* filePath)
+{
+	std::ifstream inputFile(filePath);
+	std::string line;
+
+	std::string result = "";
+
+	if(inputFile.is_open())
+	{
+		bool first_line = true;
+		while(std::getline(inputFile, line))
+		{
+			if(!first_line)
+				result += "\n";
+			else
+				first_line = false;
+			result += line;
+		}
+
+		inputFile.close();
+	} else {
+		std::cout << "unable to open file" << std::endl;
+	}
+
+	return result;
+}
 
 static unsigned int compileShader(unsigned int shaderType, const char* source)
 {
@@ -34,8 +62,12 @@ unsigned int createShader(const char* vertex, const char* fragment)
 	unsigned int vertex_shader;
 	unsigned int fragment_shader;
 
-	vertex_shader = compileShader(GL_VERTEX_SHADER, vertex);
-	fragment_shader = compileShader(GL_FRAGMENT_SHADER, fragment);
+
+	std::string vertex_code = readFile(vertex).c_str();
+	std::string fragment_code = readFile(fragment).c_str();
+
+	vertex_shader = compileShader(GL_VERTEX_SHADER, vertex_code.c_str());
+	fragment_shader = compileShader(GL_FRAGMENT_SHADER, fragment_code.c_str());
 	glAttachShader(program, vertex_shader);
 	glAttachShader(program, fragment_shader);
 	glLinkProgram(program);
@@ -51,21 +83,6 @@ unsigned int createShader(const char* vertex, const char* fragment)
 
 int main()
 {
-	const char* vertCode =
-	"#version 330 core\n"
-	"layout(location=1) in vec3 a_position;\n"
-	"void main()\n"
-	"{\n"
-		"gl_Position = vec4(a_position, 1.0);\n"
-	"}\0";
-
-	const char* fragCode =
-	"#version 330 core\n"
-	"void main()\n"
-	"{\n"
-		"gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);\n"
-	"}\0";
-
 	#if DEBUG_MODE
 	std::cout << "Debug Mode On" << std::endl;
 	#endif
@@ -90,7 +107,7 @@ int main()
 		return -1;
 	}
 
-	unsigned int shaderProgram = createShader(vertCode, fragCode);
+	unsigned int shaderProgram = createShader("res/shaders/default/vertex.glsl", "res/shaders/default/fragment.glsl");
 
 	unsigned int vbo;
 	glGenBuffers(1, &vbo);
