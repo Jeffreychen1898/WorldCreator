@@ -7,17 +7,14 @@
 #include <glad.h>
 #include <GLFW/glfw3.h>
 
+#include "opengl/shader.h"
+
 namespace Graphics
 {
     class Renderer
     {
         private:
-            unsigned int m_shaderProgram;
-            unsigned int m_vao;
-            unsigned int m_ibo;
-
-            unsigned int m_positionVbo;
-            unsigned int m_colorVbo;
+            Graphics::Shader m_defaultShader;
 
         public:
             Renderer();

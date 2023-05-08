@@ -3,7 +3,7 @@
 namespace Graphics
 {
     Window::Window(unsigned int _width, unsigned int _height, const char* _title)
-        : m_defaultWidth(_width), m_defaultHeight(_height), m_title(_title)
+        : m_defaultWidth(_width), m_defaultHeight(_height), m_title(_title), m_windowPtr(nullptr)
     {
     }
 

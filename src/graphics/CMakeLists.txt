@@ -6,3 +6,5 @@ add_library(Graphics
 target_include_directories(Graphics PUBLIC
     ${PROJECT_SOURCE_DIR}/deps/glad
 )
+
+add_subdirectory(opengl)
