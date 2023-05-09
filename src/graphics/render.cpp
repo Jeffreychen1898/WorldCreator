@@ -14,14 +14,9 @@ namespace Graphics
 		m_defaultShader.AddVertexBuffer(1, 3, 0);
 		m_defaultShader.AddVertexBuffer(2, 3, 3);
 
-		float s = 1.5;
-		float projection_matrix_raw[] = {
-			s, 0, 0, 0,
-			0, s, 0, 0,
-			0, 0, s, 0,
-			0, 0, 0, 1
-		};
-		m_projectionMatrix.SetData(projection_matrix_raw);
+		glm::mat4 proj = glm::ortho(0.0, 1024.0, 768.0, 0.0, -1.0, 1.0);
+
+		m_projectionMatrix.SetData(&proj[0][0]);
 
 		m_defaultShader.AttachUniform("u_projection", m_projectionMatrix);
 

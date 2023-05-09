@@ -6,6 +6,8 @@
 
 #include <glad.h>
 #include <GLFW/glfw3.h>
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
 
 #include "opengl/shader.h"
 #include "opengl/opengl.h"
