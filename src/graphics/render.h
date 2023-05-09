@@ -8,6 +8,8 @@
 #include <GLFW/glfw3.h>
 
 #include "opengl/shader.h"
+#include "opengl/opengl.h"
+#include "../utils/verticesArray.h"
 
 namespace Graphics
 {
@@ -15,6 +17,9 @@ namespace Graphics
     {
         private:
             Graphics::Shader m_defaultShader;
+            Graphics::Opengl m_opengl;
+            Utils::VerticesArray m_verticesArray;
+            Graphics::Mat4Container m_projectionMatrix;
 
         public:
             Renderer();
@@ -24,6 +29,9 @@ namespace Graphics
 
             void StartOfFrame();
             void EndOfFrame();
+
+            /* temporary functions */
+            void DrawRect(float x, float y, float width, float height);
 
         private:
             void readFile(std::string& _output, const char* _path);

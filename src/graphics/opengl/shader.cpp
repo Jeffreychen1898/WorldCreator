@@ -41,21 +41,45 @@ namespace Graphics
         m_vertexBuffers.insert({ _location, vertex_buffer });
     }
 
-    void Shader::AttributeData(unsigned int _vertexCount, float* data)
+    void Shader::AttachUniform(const char* _uniformName, Graphics::ShaderUniformContainer& _uniformContainer)
+    {
+        Bind();
+
+        unsigned int get_uniform_location = glGetUniformLocation(m_shaderProgram, _uniformName);
+        m_uniformLocations.insert({ _uniformName, get_uniform_location });
+
+        SetUniform(_uniformName, _uniformContainer.GetData(), _uniformContainer.GetUniformType());
+
+        _uniformContainer.BindShader(m_shaderProgram);
+        m_uniformList.push_back({ _uniformName, &_uniformContainer });
+    }
+
+    void Shader::AttributeData(unsigned int _vertexCount, float* _data)
     {
         Bind();
 
         for(const auto& pair : m_vertexBuffers)
         {
             glBindBuffer(GL_ARRAY_BUFFER, pair.second);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(float) * _vertexCount * m_vertexSize, data, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(float) * _vertexCount * m_vertexSize, _data, GL_DYNAMIC_DRAW);
         }
     }
 
-    void Shader::IndexBufferData(unsigned int size, unsigned int* data)
+    void Shader::IndexBufferData(unsigned int size, unsigned int* _data)
     {
         Bind();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * size, data, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * size, _data, GL_DYNAMIC_DRAW);
+    }
+
+    void Shader::SetUniform(const char* _uniformName, float* _data, unsigned int _uniformType)
+    {
+        unsigned int uniform_location = m_uniformLocations[_uniformName];
+        switch(_uniformType)
+        {
+            case UNIFORM_MAT4:
+                glUniformMatrix4fv(uniform_location, 1, GL_FALSE, _data);
+                break;
+        }
     }
 
     void Shader::Bind()
@@ -63,6 +87,15 @@ namespace Graphics
         glUseProgram(m_shaderProgram);
         glBindVertexArray(m_vertexArray);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+
+        for(const auto& each_uniform : m_uniformList)
+        {
+            if(!each_uniform.second->IsShaderUpdated(m_shaderProgram))
+            {
+                SetUniform(each_uniform.first, each_uniform.second->GetData(), each_uniform.second->GetUniformType());
+                each_uniform.second->SetShaderUpdated(m_shaderProgram);
+            }
+        }
     }
 
     void Shader::CompileShader(unsigned int& _shader, const char* _shaderCode, unsigned int _shaderType)
@@ -133,4 +166,16 @@ namespace Graphics
         for(const auto& pair : m_vertexBuffers)
             glDeleteBuffers(1, &pair.second);
     }
+
+    bool ShaderUniformContainer::IsShaderUpdated(unsigned int _shaderId)
+    {
+        /*if(m_shaderUpdated.find(_shaderId) != m_shaderUpdated.end())
+            return m_shaderUpdated[_shaderId];*/
+        
+        return false;
+    }
+
+    Mat4Container::Mat4Container()
+        : ShaderUniformContainer(UNIFORM_MAT4)
+    {}
 }

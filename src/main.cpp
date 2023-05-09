@@ -19,6 +19,10 @@ int main()
 	while(window.IsOpen())
 	{
 		renderer.StartOfFrame();
+
+		renderer.DrawRect(-0.2, -0.2, 0.3, 0.3);
+		renderer.DrawRect(0.2, 0.2, 0.3, 0.3);
+
 		renderer.EndOfFrame();
 
 		window.EndOfFrame();

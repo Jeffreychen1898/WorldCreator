@@ -8,31 +8,55 @@ namespace Graphics
 
     void Renderer::Init()
     {
+		m_opengl.Init();
+
 		m_defaultShader.Create(6, "res/shaders/default/vertex.glsl", "res/shaders/default/fragment.glsl");
 		m_defaultShader.AddVertexBuffer(1, 3, 0);
 		m_defaultShader.AddVertexBuffer(2, 3, 3);
+
+		float s = 1.5;
+		float projection_matrix_raw[] = {
+			s, 0, 0, 0,
+			0, s, 0, 0,
+			0, 0, s, 0,
+			0, 0, 0, 1
+		};
+		m_projectionMatrix.SetData(projection_matrix_raw);
+
+		m_defaultShader.AttachUniform("u_projection", m_projectionMatrix);
+
+		m_verticesArray.SetVertexSize(m_defaultShader.GetVertexSize());
     }
 
     void Renderer::StartOfFrame()
     {
-        glClear(GL_COLOR_BUFFER_BIT);
-        float data[] = {
-    		-0.5, -0.5, 0.0,	1.0, 0.0, 0.0,
-    		 0.5, -0.5, 0.0,	0.0, 1.0, 0.0,
-    		 0.5,  0.5, 0.0,	1.0, 1.0, 1.0,
-	    	-0.5,  0.5, 0.0,	1.0, 1.0, 0.0
+        m_opengl.ClearBuffers();
+		m_verticesArray.Clear();
+    }
+
+	void Renderer::DrawRect(float x, float y, float width, float height)
+	{
+		float data[] = {
+    		x, y, 0.0,					1.0, 0.0, 0.0,
+    		x+width, y, 0.0,			0.0, 1.0, 0.0,
+    		x+width,  y+height, 0.0,	1.0, 1.0, 1.0,
+	    	x,  y+height, 0.0,			1.0, 1.0, 0.0
     	};
     	unsigned int indices[] = {
     		0, 1, 2,
     		0, 2, 3
     	};
-		m_defaultShader.AttributeData(4, data);
-		m_defaultShader.IndexBufferData(6, indices);
-    }
+
+		if(!m_verticesArray.AddShape(24, data, 6, indices))
+		{
+			m_opengl.MakeDrawCall(m_defaultShader, m_verticesArray);
+			m_verticesArray.AddShape(24, data, 6, indices);
+		}
+	}
 
     void Renderer::EndOfFrame()
     {
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		m_opengl.MakeDrawCall(m_defaultShader, m_verticesArray);
     }
 
     Renderer::~Renderer()
