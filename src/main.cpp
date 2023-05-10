@@ -13,7 +13,7 @@ int main()
 	if(!window.Init())
 		return -1;
 
-	Graphics::Renderer renderer;
+	Graphics::Renderer renderer(10, 100);
 	renderer.Init();
 
 	while(window.IsOpen())
@@ -22,7 +22,7 @@ int main()
 
 		//renderer.DrawRect(-0.2, -0.2, 0.3, 0.3);
 		//renderer.DrawRect(0.2, 0.2, 0.3, 0.3);
-		renderer.DrawRect(100, 100, 100, 100);
+		renderer.DrawRect(0, 0, 100, 100);
 		renderer.DrawRect(300, 300, 200, 200);
 
 		renderer.EndOfFrame();

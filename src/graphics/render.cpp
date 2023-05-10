@@ -2,7 +2,8 @@
 
 namespace Graphics
 {
-    Renderer::Renderer()
+    Renderer::Renderer(float _near, float _far)
+		: m_nearValue(_near), m_farValue(_far)
     {
     }
 
@@ -14,11 +15,17 @@ namespace Graphics
 		m_defaultShader.AddVertexBuffer(1, 3, 0);
 		m_defaultShader.AddVertexBuffer(2, 3, 3);
 
-		glm::mat4 proj = glm::ortho(0.0, 1024.0, 768.0, 0.0, -1.0, 1.0);
+		/* setup the camera */
+		float fovy = glm::radians(90.f);
+		float aspect_ratio = 1024.f / 768.f;
+		m_projectionMatrix = glm::perspective(fovy, aspect_ratio, m_nearValue, m_farValue);
+		glm::mat4 default_view = glm::lookAt(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
 
-		m_projectionMatrix.SetData(&proj[0][0]);
+		glm::mat4 mvp_matrix = m_projectionMatrix * default_view;
 
-		m_defaultShader.AttachUniform("u_projection", m_projectionMatrix);
+		m_cameraContainer.SetData(&mvp_matrix[0][0]);
+
+		m_defaultShader.AttachUniform("u_projection", m_cameraContainer);
 
 		m_verticesArray.SetVertexSize(m_defaultShader.GetVertexSize());
     }
@@ -32,10 +39,10 @@ namespace Graphics
 	void Renderer::DrawRect(float x, float y, float width, float height)
 	{
 		float data[] = {
-    		x, y, 0.0,					1.0, 0.0, 0.0,
-    		x+width, y, 0.0,			0.0, 1.0, 0.0,
-    		x+width,  y+height, 0.0,	1.0, 1.0, 1.0,
-	    	x,  y+height, 0.0,			1.0, 1.0, 0.0
+    		x, y, -30.0,				1.0, 0.0, 0.0,
+    		x+width, y, -30.0,			0.0, 1.0, 0.0,
+    		x+width,  y+height, -30.0,	1.0, 1.0, 1.0,
+	    	x,  y+height, -30.0,		1.0, 1.0, 0.0
     	};
     	unsigned int indices[] = {
     		0, 1, 2,

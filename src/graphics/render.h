@@ -18,13 +18,18 @@ namespace Graphics
     class Renderer
     {
         private:
+            /* opengl related */
             Graphics::Shader m_defaultShader;
             Graphics::Opengl m_opengl;
             Utils::VerticesArray m_verticesArray;
-            Graphics::Mat4Container m_projectionMatrix;
+
+            /* camera */
+            float m_nearValue, m_farValue;
+            Graphics::Mat4Container m_cameraContainer;
+            glm::mat4 m_projectionMatrix;
 
         public:
-            Renderer();
+            Renderer(float _near, float _far);
             ~Renderer();
 
             void Init();
