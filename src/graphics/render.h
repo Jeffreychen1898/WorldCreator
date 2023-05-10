@@ -12,6 +12,7 @@
 #include "opengl/shader.h"
 #include "opengl/opengl.h"
 #include "../utils/verticesArray.h"
+#include "camera.h"
 
 namespace Graphics
 {
@@ -27,6 +28,8 @@ namespace Graphics
             float m_nearValue, m_farValue;
             Graphics::Mat4Container m_cameraContainer;
             glm::mat4 m_projectionMatrix;
+
+            Graphics::Camera3D m_defaultCamera;
 
         public:
             Renderer(float _near, float _far);

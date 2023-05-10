@@ -169,13 +169,16 @@ namespace Graphics
 
     bool ShaderUniformContainer::IsShaderUpdated(unsigned int _shaderId)
     {
-        /*if(m_shaderUpdated.find(_shaderId) != m_shaderUpdated.end())
-            return m_shaderUpdated[_shaderId];*/
+        if(m_shaderUpdated.find(_shaderId) != m_shaderUpdated.end())
+            return m_shaderUpdated[_shaderId];
         
         return false;
     }
 
     Mat4Container::Mat4Container()
         : ShaderUniformContainer(UNIFORM_MAT4)
-    {}
+    {
+        for(unsigned int i=0;i<16;++i)
+            m_data[i] = (i % 5 == 0) ? 1 : 0;
+    }
 }

@@ -27,6 +27,9 @@ namespace Graphics
 
         glDrawElements(GL_TRIANGLES, _verticesArray.GetIndicesSize(), GL_UNSIGNED_INT, 0);
         _verticesArray.Clear();
+
+        /* call bind to update all of the uniforms that have not been updated */
+        _shaderProgram.Bind();
     }
 
     Opengl::~Opengl()

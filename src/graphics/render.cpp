@@ -15,19 +15,16 @@ namespace Graphics
 		m_defaultShader.AddVertexBuffer(1, 3, 0);
 		m_defaultShader.AddVertexBuffer(2, 3, 3);
 
-		/* setup the camera */
-		float fovy = glm::radians(90.f);
-		float aspect_ratio = 1024.f / 768.f;
-		m_projectionMatrix = glm::perspective(fovy, aspect_ratio, m_nearValue, m_farValue);
-		glm::mat4 default_view = glm::lookAt(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
-
-		glm::mat4 mvp_matrix = m_projectionMatrix * default_view;
-
-		m_cameraContainer.SetData(&mvp_matrix[0][0]);
-
-		m_defaultShader.AttachUniform("u_projection", m_cameraContainer);
-
 		m_verticesArray.SetVertexSize(m_defaultShader.GetVertexSize());
+
+		/* setup the camera */
+		float fov = glm::radians(90.f);
+		float aspect_ratio = 1024.f / 768.f;
+		m_defaultCamera.Init(fov, aspect_ratio, m_nearValue, m_farValue);
+
+		m_defaultCamera.AttachShader("u_projection", m_defaultShader);
+
+		m_defaultShader.Bind();
     }
 
     void Renderer::StartOfFrame()
