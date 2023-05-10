@@ -172,7 +172,13 @@ namespace Graphics
         if(m_shaderUpdated.find(_shaderId) != m_shaderUpdated.end())
             return m_shaderUpdated[_shaderId];
         
-        return false;
+        return true;
+    }
+
+    void ShaderUniformContainer::SetAllNotUpdated()
+    {
+        for(auto& [key, value] : m_shaderUpdated)
+            value = false;
     }
 
     Mat4Container::Mat4Container()

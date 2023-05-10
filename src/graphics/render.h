@@ -40,6 +40,8 @@ namespace Graphics
             void StartOfFrame();
             void EndOfFrame();
 
+            Graphics::Camera3D* GetDefaultCamera() { return &m_defaultCamera; };
+
             /* temporary functions */
             void DrawRect(float x, float y, float width, float height);
 

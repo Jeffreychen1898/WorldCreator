@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <unordered_map>
 
 #include <glad.h>
 #include <GLFW/glfw3.h>
@@ -24,5 +25,7 @@ namespace Graphics
             void EndOfFrame();
 
             void Terminate();
+
+            bool IsKeyPressed(int _key) { return glfwGetKey(m_windowPtr, _key) == GLFW_PRESS; };
     };
 }

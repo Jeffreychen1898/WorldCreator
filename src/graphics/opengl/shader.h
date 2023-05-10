@@ -31,6 +31,8 @@ namespace Graphics
 
             unsigned int GetUniformType() const { return m_uniformType; };
             bool IsShaderUpdated(unsigned int _shaderId);
+
+            void SetAllNotUpdated();
     };
 
     class Mat4Container : public ShaderUniformContainer
@@ -43,7 +45,7 @@ namespace Graphics
 
             float* GetData() { return m_data; };
 
-            void SetData(float* _data) { memcpy(m_data, _data, sizeof(float) * 16); };
+            void SetData(float* _data) { memcpy(m_data, _data, sizeof(float) * 16); SetAllNotUpdated(); };
     };
 
     class Shader

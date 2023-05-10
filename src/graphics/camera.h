@@ -1,7 +1,10 @@
 #pragma once
 
+#include <iostream>
+
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
+#include <gtx/io.hpp>
 
 #include "opengl/shader.h"
 
@@ -52,5 +55,8 @@ namespace Graphics
             };
 
             void AttachShader(const char* _uniformName, Graphics::Shader& _shader) { _shader.AttachUniform(_uniformName, m_uniformContainer); };
+
+            void PrintPosition() const { std::cout << m_position << std::endl; };
+            void PrintCenter() const { std::cout << m_center << std::endl; };
     };
 }
