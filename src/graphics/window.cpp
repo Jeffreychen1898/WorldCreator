@@ -3,7 +3,8 @@
 namespace Graphics
 {
     Window::Window(unsigned int _width, unsigned int _height, const char* _title)
-        : m_defaultWidth(_width), m_defaultHeight(_height), m_title(_title), m_windowPtr(nullptr)
+        : m_defaultWidth(_width), m_defaultHeight(_height), m_title(_title), m_windowPtr(nullptr),
+        m_mouseX(0), m_mouseY(0), m_previousMouseX(0), m_previousMouseY(0)
     {
     }
 
@@ -37,6 +38,13 @@ namespace Graphics
 	    }
 
         return true;
+    }
+
+    void Window::StartOfFrame()
+    {
+        m_previousMouseX = m_mouseX;
+        m_previousMouseY = m_mouseY;
+        glfwGetCursorPos(m_windowPtr, &m_mouseX, &m_mouseY);
     }
 
     void Window::EndOfFrame()

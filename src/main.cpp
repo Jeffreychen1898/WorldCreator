@@ -21,32 +21,37 @@ int main()
 
 	while(window.IsOpen())
 	{
+		window.StartOfFrame();
 		renderer.StartOfFrame();
 
 		if(window.IsKeyPressed(GLFW_KEY_W))
 		{
-			renderer.GetDefaultCamera()->MovePosition(0, 2, 0);
+			renderer.GetDefaultCamera()->MoveForward(2);
 			//renderer.GetDefaultCamera()->MoveCenter(0, 2, 0);
 		}
 		if(window.IsKeyPressed(GLFW_KEY_A))
 		{
-			renderer.GetDefaultCamera()->MovePosition(-2, 0, 0);
+			renderer.GetDefaultCamera()->MoveRight(-2);
 			//renderer.GetDefaultCamera()->MoveCenter(-2, 0, 0);
 		}
 		if(window.IsKeyPressed(GLFW_KEY_S))
 		{
-			renderer.GetDefaultCamera()->MovePosition(0, -2, 0);
+			renderer.GetDefaultCamera()->MoveForward(-2);
 			//renderer.GetDefaultCamera()->MoveCenter(0, -2, 0);
 		}
 		if(window.IsKeyPressed(GLFW_KEY_D))
 		{
-			renderer.GetDefaultCamera()->MovePosition(2, 0, 0);
+			renderer.GetDefaultCamera()->MoveRight(2);
 			//renderer.GetDefaultCamera()->MoveCenter(2, 0, 0);
+		}
+
+		if(window.IsMousePressed(GLFW_MOUSE_BUTTON_LEFT))
+		{
+			renderer.GetDefaultCamera()->RotateHorizontal(0.001 * (window.GetMouseX() - window.GetPreviousMouseX()));
+			renderer.GetDefaultCamera()->RotateVertical(0.001 * (window.GetMouseY() - window.GetPreviousMouseY()));
 		}
 		
 		renderer.GetDefaultCamera()->Update();
-
-		renderer.GetDefaultCamera()->PrintPosition();
 
 		//renderer.DrawRect(-0.2, -0.2, 0.3, 0.3);
 		//renderer.DrawRect(0.2, 0.2, 0.3, 0.3);
