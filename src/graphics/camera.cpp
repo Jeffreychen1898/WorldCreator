@@ -28,32 +28,60 @@ namespace Graphics
         m_uniformContainer.SetData(&camera_matrix[0][0]);
     }
 
-    void Camera3D::RotateVertical(float _angle)
+    void Camera3D::RotateCenterVertical(float _angle)
     {
         glm::vec3 center_direction = m_center - m_position;
         glm::vec3 direction = glm::normalize(-1.f * m_upDir);
 
         /* calculate how much the target moves in the vertical direction */
         float radius = length(center_direction);
-        glm::vec3 delta_center = (float)(radius * tan(_angle)) * direction;
+        glm::vec3 delta_center = (float)(radius * tan(-_angle)) * direction;
         /* make the center at the same radius from the camera */
         delta_center = glm::normalize(delta_center + center_direction) * radius;
 
         m_center = delta_center + m_position;
     }
 
-    void Camera3D::RotateHorizontal(float _angle)
+    void Camera3D::RotateCenterHorizontal(float _angle)
     {
         glm::vec3 center_direction = m_center - m_position;
         glm::vec3 direction = glm::normalize(glm::cross(center_direction, m_upDir));
 
         /* calculate how much the target moves in the horizontal direction */
         float radius = glm::length(center_direction);
-        glm::vec3 delta_center = (float)(radius * tan(_angle)) * direction;
+        glm::vec3 delta_center = (float)(radius * tan(-_angle)) * direction;
         /* make the center at the same radius from the camera */
         delta_center = glm::normalize(delta_center + center_direction) * radius;
         
         m_center = delta_center + m_position;
+    }
+
+    void Camera3D::RotateVertical(float _angle)
+    {
+        glm::vec3 center_direction = m_position - m_center;
+        glm::vec3 direction = glm::normalize(-1.f * m_upDir);
+
+        /* calculate how much the target moves in the vertical direction */
+        float radius = length(center_direction);
+        glm::vec3 delta_position = (float)(radius * tan(-_angle)) * direction;
+        /* make the center at the same radius from the camera */
+        delta_position = glm::normalize(delta_position + center_direction) * radius;
+
+        m_position = delta_position + m_center;
+    }
+
+    void Camera3D::RotateHorizontal(float _angle)
+    {
+        glm::vec3 center_direction = m_position - m_center;
+        glm::vec3 direction = glm::normalize(glm::cross(center_direction, m_upDir));
+
+        /* calculate how much the target moves in the horizontal direction */
+        float radius = glm::length(center_direction);
+        glm::vec3 delta_position = (float)(radius * tan(_angle)) * direction;
+        /* make the center at the same radius from the camera */
+        delta_position = glm::normalize(delta_position + center_direction) * radius;
+        
+        m_position = delta_position + m_center;
     }
 
     void Camera3D::MoveForward(float _amount, bool _adjustCenter)

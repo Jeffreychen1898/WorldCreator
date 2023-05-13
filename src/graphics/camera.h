@@ -34,8 +34,12 @@ namespace Graphics
             void MoveCenter(float _dx, float _dy, float _dz) { m_center = m_center + glm::vec3(_dx, _dy, _dz); };
             void MoveForward(float _amount, bool _adjustCenter=true);
             void MoveRight(float _amount, bool _adjustCenter=true);
+            void RotateCenterVertical(float _angle); /* angle must be in the range (-90 deg, 90 deg) */
+            void RotateCenterHorizontal(float _angle); /* angle must be in the range (-90 deg, 90 deg) */
             void RotateVertical(float _angle); /* angle must be in the range (-90 deg, 90 deg) */
             void RotateHorizontal(float _angle); /* angle must be in the range (-90 deg, 90 deg) */
+
+            double GetPositionCenterDistance() const { return glm::length(m_position - m_center); };
 
             void Update();
 

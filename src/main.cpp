@@ -4,6 +4,9 @@
 #include "graphics/window.h"
 #include "graphics/camera.h"
 
+#define CAMERA_ROTATE_SPEED 0.005
+#define CAMERA_ZOOM_SPEED 0.1
+
 int main()
 {
 	#if DEBUG_MODE
@@ -14,42 +17,27 @@ int main()
 	if(!window.Init())
 		return -1;
 
-	Graphics::Renderer renderer(10, 5000);
+	Graphics::Renderer renderer(1, 5000);
 	renderer.Init();
 
-	renderer.GetDefaultCamera()->SetCenter(0, 0, -30.f);
+	renderer.GetDefaultCamera()->SetCenter(0, 0, 0);
+	renderer.GetDefaultCamera()->SetPosition(0, 0, 20);
 
 	while(window.IsOpen())
 	{
 		window.StartOfFrame();
 		renderer.StartOfFrame();
 
-		if(window.IsKeyPressed(GLFW_KEY_W))
-		{
-			renderer.GetDefaultCamera()->MoveForward(2);
-			//renderer.GetDefaultCamera()->MoveCenter(0, 2, 0);
-		}
-		if(window.IsKeyPressed(GLFW_KEY_A))
-		{
-			renderer.GetDefaultCamera()->MoveRight(-2);
-			//renderer.GetDefaultCamera()->MoveCenter(-2, 0, 0);
-		}
-		if(window.IsKeyPressed(GLFW_KEY_S))
-		{
-			renderer.GetDefaultCamera()->MoveForward(-2);
-			//renderer.GetDefaultCamera()->MoveCenter(0, -2, 0);
-		}
-		if(window.IsKeyPressed(GLFW_KEY_D))
-		{
-			renderer.GetDefaultCamera()->MoveRight(2);
-			//renderer.GetDefaultCamera()->MoveCenter(2, 0, 0);
-		}
-
+		/* rotate by mouse drag */
 		if(window.IsMousePressed(GLFW_MOUSE_BUTTON_LEFT))
 		{
-			renderer.GetDefaultCamera()->RotateHorizontal(0.001 * (window.GetMouseX() - window.GetPreviousMouseX()));
-			renderer.GetDefaultCamera()->RotateVertical(0.001 * (window.GetMouseY() - window.GetPreviousMouseY()));
+			renderer.GetDefaultCamera()->RotateHorizontal(CAMERA_ROTATE_SPEED * (window.GetMouseX() - window.GetPreviousMouseX()));
+			renderer.GetDefaultCamera()->RotateVertical(CAMERA_ROTATE_SPEED * (window.GetMouseY() - window.GetPreviousMouseY()));
 		}
+
+		/* scrolling moves the camera in and out */
+		double camera_zoom_amount = CAMERA_ZOOM_SPEED * renderer.GetDefaultCamera()->GetPositionCenterDistance();
+		renderer.GetDefaultCamera()->MoveForward(window.GetDeltaScrollPosition() * camera_zoom_amount, false);
 		
 		renderer.GetDefaultCamera()->Update();
 

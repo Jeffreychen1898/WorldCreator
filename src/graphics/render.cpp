@@ -18,7 +18,7 @@ namespace Graphics
 		m_verticesArray.SetVertexSize(m_defaultShader.GetVertexSize());
 
 		/* setup the camera */
-		float fov = glm::radians(90.f);
+		float fov = glm::radians(45.f);
 		float aspect_ratio = 1024.f / 768.f;
 		m_defaultCamera.Init(fov, aspect_ratio, m_nearValue, m_farValue);
 
@@ -36,10 +36,10 @@ namespace Graphics
 	void Renderer::DrawRect(float x, float y, float width, float height)
 	{
 		float data[] = {
-    		x, y, -30.0,				1.0, 0.0, 0.0,
-    		x+width, y, -30.0,			0.0, 1.0, 0.0,
-    		x+width,  y+height, -30.0,	1.0, 1.0, 1.0,
-	    	x,  y+height, -30.0,		1.0, 1.0, 0.0
+    		x, y, 0.0,					1.0, 0.0, 0.0,
+    		x+width, y, 0.0,			0.0, 1.0, 0.0,
+    		x+width,  y+height, 0.0,	1.0, 1.0, 1.0,
+	    	x,  y+height, 0.0,			1.0, 1.0, 0.0
     	};
     	unsigned int indices[] = {
     		0, 1, 2,

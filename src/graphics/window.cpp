@@ -37,6 +37,11 @@ namespace Graphics
 	    	return false;
 	    }
 
+        glfwSetWindowUserPointer(m_windowPtr, this);
+
+        /* set window events */
+        glfwSetScrollCallback(m_windowPtr, G_ScrollCallback);
+
         return true;
     }
 
@@ -49,6 +54,8 @@ namespace Graphics
 
     void Window::EndOfFrame()
     {
+        m_deltaScrollPosition = 0;
+        
         glfwSwapBuffers(m_windowPtr);
 		glfwPollEvents();
     }
@@ -58,4 +65,9 @@ namespace Graphics
         glfwTerminate();
     }
 
+    static void G_ScrollCallback(GLFWwindow* _window, double _xoffset, double _yoffset)
+    {
+        Window* instance = static_cast<Window*>(glfwGetWindowUserPointer(_window));
+        instance->SetDeltaScrollPosition(_yoffset);
+    }
 }
