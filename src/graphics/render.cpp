@@ -25,6 +25,14 @@ namespace Graphics
 		m_defaultCamera.AttachShader("u_projection", m_defaultShader);
 
 		m_defaultShader.Bind();
+
+		/* texture */
+		m_testTexture.Create();
+		m_testTexture.Bind();
+
+		m_defaultShader.GetUniformLocation("u_texture");
+		float tex = 0;
+		m_defaultShader.SetUniform("u_texture", &tex, UNIFORM_INT);
     }
 
     void Renderer::StartOfFrame()
@@ -32,6 +40,15 @@ namespace Graphics
         m_opengl.ClearBuffers();
 		m_verticesArray.Clear();
     }
+
+	void Renderer::DrawPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices)
+	{
+		if(!m_verticesArray.AddShape(_vertexSize, _vertices, _indicesCount, _indices))
+		{
+			m_opengl.MakeDrawCall(m_defaultShader, m_verticesArray);
+			m_verticesArray.AddShape(_vertexSize, _vertices, _indicesCount, _indices);
+		}
+	}
 
 	void Renderer::DrawRect(float x, float y, float width, float height)
 	{

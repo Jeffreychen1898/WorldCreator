@@ -2,6 +2,7 @@
 
 namespace Graphics
 {
+    int Graphics::Shader::s_currentShader = -1;
     Shader::Shader()
         : m_shaderProgram(0), m_vertexArray(0), m_indexBuffer(0)
     {
@@ -25,6 +26,8 @@ namespace Graphics
     	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
 
         m_vertexSize = _vertexSize;
+
+        Graphics::Shader::s_currentShader = m_shaderProgram;
     }
 
     void Shader::AddVertexBuffer(unsigned int _location, unsigned int _size, unsigned int _offset)
@@ -43,15 +46,20 @@ namespace Graphics
 
     void Shader::AttachUniform(const char* _uniformName, Graphics::ShaderUniformContainer& _uniformContainer)
     {
-        Bind();
-
-        unsigned int get_uniform_location = glGetUniformLocation(m_shaderProgram, _uniformName);
-        m_uniformLocations.insert({ _uniformName, get_uniform_location });
+        GetUniformLocation(_uniformName);
 
         SetUniform(_uniformName, _uniformContainer.GetData(), _uniformContainer.GetUniformType());
 
         _uniformContainer.BindShader(m_shaderProgram);
         m_uniformList.push_back({ _uniformName, &_uniformContainer });
+    }
+
+    void Shader::GetUniformLocation(const char* _uniformName)
+    {
+        Bind();
+
+        unsigned int get_uniform_location = glGetUniformLocation(m_shaderProgram, _uniformName);
+        m_uniformLocations.insert({ _uniformName, get_uniform_location });
     }
 
     void Shader::AttributeData(unsigned int _vertexCount, float* _data)
@@ -79,14 +87,22 @@ namespace Graphics
             case UNIFORM_MAT4:
                 glUniformMatrix4fv(uniform_location, 1, GL_FALSE, _data);
                 break;
+            case UNIFORM_INT:
+                glUniform1i(uniform_location, (int)(*_data));
+                break;
         }
     }
 
     void Shader::Bind()
     {
-        glUseProgram(m_shaderProgram);
-        glBindVertexArray(m_vertexArray);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+        if(Graphics::Shader::s_currentShader != m_shaderProgram)
+        {
+            glUseProgram(m_shaderProgram);
+            glBindVertexArray(m_vertexArray);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+
+            Graphics::Shader::s_currentShader = m_shaderProgram;
+        }
 
         for(const auto& each_uniform : m_uniformList)
         {

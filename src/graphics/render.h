@@ -13,6 +13,7 @@
 #include "opengl/opengl.h"
 #include "../utils/verticesArray.h"
 #include "camera.h"
+#include "opengl/texture.h"
 
 namespace Graphics
 {
@@ -31,6 +32,8 @@ namespace Graphics
 
             Graphics::Camera3D m_defaultCamera;
 
+            Graphics::Texture m_testTexture;
+
         public:
             Renderer(float _near, float _far);
             ~Renderer();
@@ -41,6 +44,8 @@ namespace Graphics
             void EndOfFrame();
 
             Graphics::Camera3D* GetDefaultCamera() { return &m_defaultCamera; };
+
+            void DrawPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices);
 
             /* temporary functions */
             void DrawRect(float x, float y, float width, float height);

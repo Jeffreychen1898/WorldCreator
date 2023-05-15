@@ -9,12 +9,13 @@ namespace Graphics
 
     void Opengl::Init()
     {
-        //
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
     }
 
     void Opengl::ClearBuffers()
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     void Opengl::MakeDrawCall(Graphics::Shader& _shaderProgram, Utils::VerticesArray& _verticesArray)

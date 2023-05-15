@@ -11,6 +11,7 @@
 #include <GLFW/glfw3.h>
 
 #define UNIFORM_MAT4 0
+#define UNIFORM_INT 1
 
 namespace Graphics
 {
@@ -51,6 +52,8 @@ namespace Graphics
     class Shader
     {
         private:
+            static int s_currentShader;
+
             unsigned int m_shaderProgram;
             unsigned int m_vertexArray;
             unsigned int m_indexBuffer;
@@ -73,9 +76,11 @@ namespace Graphics
 
             void AddVertexBuffer(unsigned int _location, unsigned int _size, unsigned int _offset);
             void AttachUniform(const char* _uniformName, Graphics::ShaderUniformContainer& _uniformContainer);
+            void GetUniformLocation(const char* _uniformName);
 
             void AttributeData(unsigned int _vertexCount, float* _data);
             void IndexBufferData(unsigned int size, unsigned int* _data);
+            void SetUniform(const char* _uniformName, float* _data, unsigned int _uniformType);
 
             void Bind();
 
@@ -85,7 +90,5 @@ namespace Graphics
             void CompileShader(unsigned int& _shader, const char* _shaderCode, unsigned int _shaderType);
             void CreateProgram(unsigned int& _program, const char* _vertexCode, const char* _fragmentCode);
             void readFile(std::string& _output, const char* _filename);
-
-            void SetUniform(const char* _uniformName, float* _data, unsigned int _uniformType);
     };
 }
