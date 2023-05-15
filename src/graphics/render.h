@@ -25,6 +25,8 @@ namespace Graphics
             Graphics::Opengl m_opengl;
             Utils::VerticesArray m_verticesArray;
 
+            unsigned int m_drawCallCount;
+
             /* camera */
             float m_nearValue, m_farValue;
             Graphics::Mat4Container m_cameraContainer;
@@ -32,7 +34,10 @@ namespace Graphics
 
             Graphics::Camera3D m_defaultCamera;
 
-            Graphics::Texture m_testTexture;
+            Graphics::Texture m_defaultTexture;
+            
+            /* basic rendering things */
+            float m_setColor[4];
 
         public:
             Renderer(float _near, float _far);
@@ -45,10 +50,19 @@ namespace Graphics
 
             Graphics::Camera3D* GetDefaultCamera() { return &m_defaultCamera; };
 
+            void BindShader(Graphics::Shader& _shader);
+            void BindDefaultShader() { BindShader(m_defaultShader); };
+
+            void Fill(float _brightness) { Fill(_brightness, _brightness, _brightness, 255); };
+            void Fill(float _brightness, float _alpha) { Fill(_brightness, _brightness, _brightness, _alpha); };
+            void Fill(float _red, float _green, float _blue) { Fill(_red, _green, _blue, 255); };
+            void Fill(float _red, float _green, float _blue, float _alpha);
+
+            void DrawRect(float _x, float _y, float _width, float _height) { DrawImage(m_defaultTexture, _x, _y, _width, _height); };
+            void DrawImage(Graphics::Texture& _texture, float _x, float _y, float _width, float _height);
             void DrawPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices);
 
-            /* temporary functions */
-            void DrawRect(float x, float y, float width, float height);
+            unsigned int GetDrawCallCount() const { return m_drawCallCount; };
 
         private:
             void readFile(std::string& _output, const char* _path);

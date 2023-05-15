@@ -51,9 +51,9 @@ namespace Graphics
 
     class Shader
     {
+        public:
+            static Graphics::Shader* s_currentShaderPtr;
         private:
-            static int s_currentShader;
-
             unsigned int m_shaderProgram;
             unsigned int m_vertexArray;
             unsigned int m_indexBuffer;
@@ -82,9 +82,11 @@ namespace Graphics
             void IndexBufferData(unsigned int size, unsigned int* _data);
             void SetUniform(const char* _uniformName, float* _data, unsigned int _uniformType);
 
-            void Bind();
+            bool IsBounded() const;
+            void Bind(bool _updateUniforms=true);
 
             unsigned int GetVertexSize() const { return m_vertexSize; };
+            unsigned int GetId() const { return m_shaderProgram; };
 
         private:
             void CompileShader(unsigned int& _shader, const char* _shaderCode, unsigned int _shaderType);

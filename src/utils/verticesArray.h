@@ -28,6 +28,7 @@ namespace Utils
             bool AddShape(unsigned int _verticesSize, float* _vertices, unsigned int _indicesSize, unsigned int* _indices);
             void Clear();
 
+            bool IsEmpty() const { return m_indicesCounter < 3; };
             unsigned int GetVertexSize() const { return m_vertexCounter; };
             unsigned int GetIndicesSize() const { return m_indicesCounter; };
             float* GetVerticesData() { return m_vertexData; };

@@ -2,7 +2,7 @@
 
 namespace Graphics
 {
-    int Graphics::Shader::s_currentShader = -1;
+    Graphics::Shader* Graphics::Shader::s_currentShaderPtr = nullptr;
     Shader::Shader()
         : m_shaderProgram(0), m_vertexArray(0), m_indexBuffer(0)
     {
@@ -27,7 +27,7 @@ namespace Graphics
 
         m_vertexSize = _vertexSize;
 
-        Graphics::Shader::s_currentShader = m_shaderProgram;
+        s_currentShaderPtr = this;
     }
 
     void Shader::AddVertexBuffer(unsigned int _location, unsigned int _size, unsigned int _offset)
@@ -93,16 +93,22 @@ namespace Graphics
         }
     }
 
-    void Shader::Bind()
+    void Shader::Bind(bool _updateUniforms)
     {
-        if(Graphics::Shader::s_currentShader != m_shaderProgram)
+        bool shader_will_bind = false;
+        if(s_currentShaderPtr != this)
         {
             glUseProgram(m_shaderProgram);
             glBindVertexArray(m_vertexArray);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
 
-            Graphics::Shader::s_currentShader = m_shaderProgram;
+            s_currentShaderPtr = this;
+
+            shader_will_bind = true;
         }
+
+        if(!shader_will_bind && !_updateUniforms)
+            return;
 
         for(const auto& each_uniform : m_uniformList)
         {
@@ -112,6 +118,14 @@ namespace Graphics
                 each_uniform.second->SetShaderUpdated(m_shaderProgram);
             }
         }
+    }
+
+    bool Shader::IsBounded() const
+    {
+        if(s_currentShaderPtr == nullptr)
+            return false;
+
+        return s_currentShaderPtr == this;
     }
 
     void Shader::CompileShader(unsigned int& _shader, const char* _shaderCode, unsigned int _shaderType)
@@ -181,6 +195,9 @@ namespace Graphics
 
         for(const auto& pair : m_vertexBuffers)
             glDeleteBuffers(1, &pair.second);
+
+        if(s_currentShaderPtr == this)
+            s_currentShaderPtr = nullptr;
     }
 
     bool ShaderUniformContainer::IsShaderUpdated(unsigned int _shaderId)

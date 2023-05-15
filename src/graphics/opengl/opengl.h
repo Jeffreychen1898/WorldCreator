@@ -18,6 +18,6 @@ namespace Graphics
             void Init();
 
             void ClearBuffers();
-            void MakeDrawCall(Graphics::Shader& _shaderProgram, Utils::VerticesArray& _verticesArray);
+            void MakeDrawCall(Utils::VerticesArray& _verticesArray, unsigned int& _drawCallCount);
     };
 }

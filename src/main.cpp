@@ -1,3 +1,10 @@
+/*
+		NOTE TO SELF
+			refactor any ugly code
+			code review
+			draw diagram for code architechure
+*/
+
 #include <iostream>
 
 #include "graphics/render.h"
@@ -23,21 +30,24 @@ int main()
 	renderer.GetDefaultCamera()->SetCenter(0, 0, 0);
 	renderer.GetDefaultCamera()->SetPosition(0, 0, 20);
 
+	/* create a new shader to handle this surface */
+	Graphics::Shader surface_shader;
+	surface_shader.Create(3, "res/shaders/surface_test/vertex.glsl", "res/shaders/surface_test/fragment.glsl");
+	surface_shader.AddVertexBuffer(1, 3, 0);
+	renderer.GetDefaultCamera()->AttachShader("u_projection", surface_shader);
+
 	/* generate the vertices of the surface */
 	unsigned int surface_x_sample_count = 10;
 	unsigned int surface_z_sample_count = 10;
-	float surface_vertices[surface_x_sample_count * surface_z_sample_count * 6];
+	float surface_vertices[surface_x_sample_count * surface_z_sample_count * 3];
 	for(unsigned int i=0;i<surface_z_sample_count;++i)
 	{
 		for(unsigned int j=0;j<surface_x_sample_count;++j)
 		{
-			unsigned int vertex_index = ((i * surface_x_sample_count) + j) * 6;
+			unsigned int vertex_index = ((i * surface_x_sample_count) + j) * 3;
 			surface_vertices[vertex_index + 0] = (float)j * 50 - 250;
 			surface_vertices[vertex_index + 1] = 0;
 			surface_vertices[vertex_index + 2] = (float)i * 50 - 500;
-			surface_vertices[vertex_index + 3] = 1;
-			surface_vertices[vertex_index + 4] = 0;
-			surface_vertices[vertex_index + 5] = 0;
 		}
 	}
 
@@ -59,6 +69,7 @@ int main()
 		}
 	}
 
+	renderer.BindDefaultShader();
 	while(window.IsOpen())
 	{
 		window.StartOfFrame();
@@ -78,15 +89,16 @@ int main()
 		renderer.GetDefaultCamera()->Update();
 
 		/* generate the vertices */
-		//
 
-		//renderer.DrawRect(-0.2, -0.2, 0.3, 0.3);
-		//renderer.DrawRect(0.2, 0.2, 0.3, 0.3);
+		renderer.Fill(255, 255, 0);
 		renderer.DrawRect(-10, -10, 20, 20);
-		//renderer.DrawRect(300, 300, 200, 200);
-		renderer.DrawPolygons(surface_x_sample_count * surface_z_sample_count * 6, surface_vertices, counter, surface_indices);
+
+		renderer.BindShader(surface_shader);
+		renderer.DrawPolygons(surface_x_sample_count * surface_z_sample_count * 3, surface_vertices, counter, surface_indices);
 
 		renderer.EndOfFrame();
+
+		std::cout << renderer.GetDrawCallCount() << std::endl;
 
 		window.EndOfFrame();
 	}
