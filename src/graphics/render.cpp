@@ -16,9 +16,10 @@ namespace Graphics
 		m_opengl.Init();
 
 		/* setup the default shader */
-		m_defaultShader.Create(7, "res/shaders/default/vertex.glsl", "res/shaders/default/fragment.glsl");
+		m_defaultShader.Create(9, "res/shaders/default/vertex.glsl", "res/shaders/default/fragment.glsl");
 		m_defaultShader.AddVertexBuffer(1, 3, 0);
 		m_defaultShader.AddVertexBuffer(2, 4, 3);
+		m_defaultShader.AddVertexBuffer(3, 2, 7);
 
 		m_verticesArray.SetVertexSize(m_defaultShader.GetVertexSize());
 
@@ -63,11 +64,17 @@ namespace Graphics
 
 	void Renderer::DrawPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices)
 	{
-		if(!m_verticesArray.AddShape(_vertexSize, _vertices, _indicesCount, _indices))
+		if(_indicesCount < MAX_INDICES && _vertexSize < MAX_VERTEX_SIZE)
 		{
-			m_opengl.MakeDrawCall(m_verticesArray, m_drawCallCount);
-			m_verticesArray.AddShape(_vertexSize, _vertices, _indicesCount, _indices);
+			if(!m_verticesArray.AddShape(_vertexSize, _vertices, _indicesCount, _indices))
+			{
+				m_opengl.MakeDrawCall(m_verticesArray, m_drawCallCount);
+				m_verticesArray.AddShape(_vertexSize, _vertices, _indicesCount, _indices);
+			}
+			return;
 		}
+
+		// split into multiple batches
 	}
 
 	void Renderer::Fill(float _red, float _green, float _blue, float _alpha)
@@ -84,20 +91,20 @@ namespace Graphics
 		_texture.Bind(0);
 
 		float data[] = {
-    		_x, _y, 0.0,					m_setColor[0], m_setColor[1], m_setColor[2], m_setColor[3],
-    		_x+_width, _y, 0.0,				m_setColor[0], m_setColor[1], m_setColor[2], m_setColor[3],
-    		_x+_width,  _y+_height, 0.0,	m_setColor[0], m_setColor[1], m_setColor[2], m_setColor[3],
-	    	_x,  _y+_height, 0.0,			m_setColor[0], m_setColor[1], m_setColor[2], m_setColor[3]
+    		_x, _y, 0.0,					m_setColor[0], m_setColor[1], m_setColor[2], m_setColor[3],			0.0, 1.0,
+    		_x+_width, _y, 0.0,				m_setColor[0], m_setColor[1], m_setColor[2], m_setColor[3],			1.0, 1.0,
+    		_x+_width,  _y+_height, 0.0,	m_setColor[0], m_setColor[1], m_setColor[2], m_setColor[3],			1.0, 0.0,
+	    	_x,  _y+_height, 0.0,			m_setColor[0], m_setColor[1], m_setColor[2], m_setColor[3],			0.0, 0.0
     	};
     	unsigned int indices[] = {
     		0, 1, 2,
     		0, 2, 3
     	};
 
-		if(!m_verticesArray.AddShape(28, data, 6, indices))
+		if(!m_verticesArray.AddShape(36, data, 6, indices))
 		{
 			m_opengl.MakeDrawCall(m_verticesArray, m_drawCallCount);
-			m_verticesArray.AddShape(28, data, 6, indices);
+			m_verticesArray.AddShape(36, data, 6, indices);
 		}
 	}
 

@@ -11,6 +11,7 @@ namespace Graphics {
     {
         glGenTextures(1, &m_textureId);
         Bind(0);
+        glBindTexture(GL_TEXTURE_2D, m_textureId);
 
         GLenum min_filter = (_settings & TEX_MIN_NEAREST) > 0 ? GL_NEAREST : GL_LINEAR;
         GLenum mag_filter = (_settings & TEX_MAG_NEAREST) > 0 ? GL_NEAREST : GL_LINEAR;
@@ -42,6 +43,7 @@ namespace Graphics {
         switch(_inputChannels) {
             case 1:
                 data_format = GL_RED;
+                glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
                 break;
             case 2:
                 data_format = GL_RG;
@@ -55,6 +57,8 @@ namespace Graphics {
         }
 
         glTexImage2D(GL_TEXTURE_2D, 0, internal_format, _width, _height, 0, data_format, GL_UNSIGNED_BYTE, _data);
+        if(data_format == GL_RED)
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
         Bind(0);
     }
