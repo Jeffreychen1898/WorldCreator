@@ -62,7 +62,7 @@ int main()
 		{
 			unsigned int vertex_index = ((i * surface_x_sample_count) + j) * 3;
 			surface_vertices[vertex_index + 0] = (float)j * 50.f - (25.f * surface_x_sample_count);
-			surface_vertices[vertex_index + 1] = new_perlin_noise.Sample(j, i) * 100.f;
+			surface_vertices[vertex_index + 1] = new_perlin_noise.Sample((int)j-10, (int)i-10) * 100.f;
 			surface_vertices[vertex_index + 2] = (float)i * 50.f - (50.f * surface_z_sample_count);
 		}
 	}

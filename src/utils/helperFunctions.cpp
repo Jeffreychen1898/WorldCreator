@@ -18,4 +18,11 @@ namespace Utils
     {
         return (*g_randomDistribution)(*g_randomGenerator);
     }
+
+    int Floor(float _value)
+    {
+        int converted_value = (int)_value;
+        if(converted_value == _value) return converted_value;
+        return _value < 0 ? converted_value - 1 : converted_value;
+    }
 }

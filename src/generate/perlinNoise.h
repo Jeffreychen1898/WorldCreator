@@ -25,9 +25,9 @@ namespace Generate
 
         private:
             float Interpolate(float _start, float _end, float _weight);
-            std::array<glm::vec2, 4> GetDistanceVectors(std::array<unsigned int, 4>& _cornerIndexes, float _x, float _y);
-            std::array<glm::vec2, 4> GetGradientVectors(std::array<unsigned int, 4>& _cornerIndexes);
-            std::array<unsigned int, 4> GetCornerIndex(float _x, float _y);
-            glm::vec2 GetGradientVector(unsigned int _x, unsigned int _y);
+            std::array<glm::vec2, 4> GetDistanceVectors(std::array<int, 4>& _cornerIndexes, float _x, float _y);
+            std::array<glm::vec2, 4> GetGradientVectors(std::array<int, 4>& _cornerIndexes);
+            std::array<int, 4> GetCornerIndex(float _x, float _y);
+            glm::vec2 GetGradientVector(int _x, int _y);
     };
 }

@@ -11,5 +11,7 @@ namespace Utils
     
     void HelperInit();
     void HelperClose();
+
     float GetRandom();
+    int Floor(float _value);
 }
