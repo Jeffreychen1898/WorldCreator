@@ -13,5 +13,11 @@ namespace Utils
     void HelperClose();
 
     float GetRandom();
+    float RandRange(float _lower, float _upper);
+
     int Floor(float _value);
+
+    float Qrsqrt(float _number); /* using the famous quick inverse sqrt function :D */
+    float Qsqrt(float _number);
+    float Distance(float _x1, float _y1, float _x2, float _y2);
 }

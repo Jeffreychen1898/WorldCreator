@@ -13,6 +13,7 @@
 #include "graphics/camera.h"
 #include "utils/helperFunctions.h"
 #include "generate/perlinNoise.h"
+#include "generate/worleyNoise.h"
 
 #define CAMERA_ROTATE_SPEED 0.005
 #define CAMERA_ZOOM_SPEED 0.1
@@ -45,7 +46,7 @@ int main()
 	unsigned int surface_x_sample_count = 20;
 	unsigned int surface_z_sample_count = 20;
 
-	Generate::PerlinNoise2D new_perlin_noise(5);
+	Generate::PerlinNoise2D new_perlin_noise(10);
 	unsigned char texture_data[surface_x_sample_count * surface_z_sample_count];
 	for(unsigned int i=0;i<surface_z_sample_count;++i)
 		for(unsigned int j=0;j<surface_x_sample_count;++j)
@@ -61,8 +62,9 @@ int main()
 		for(unsigned int j=0;j<surface_x_sample_count;++j)
 		{
 			unsigned int vertex_index = ((i * surface_x_sample_count) + j) * 3;
+			float height = new_perlin_noise.Sample((int)j-10, (int)i-10) * 400.f;
 			surface_vertices[vertex_index + 0] = (float)j * 50.f - (25.f * surface_x_sample_count);
-			surface_vertices[vertex_index + 1] = new_perlin_noise.Sample((int)j-10, (int)i-10) * 100.f;
+			surface_vertices[vertex_index + 1] = height;
 			surface_vertices[vertex_index + 2] = (float)i * 50.f - (50.f * surface_z_sample_count);
 		}
 	}
