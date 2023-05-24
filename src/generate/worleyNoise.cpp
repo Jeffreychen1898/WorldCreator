@@ -41,15 +41,6 @@ namespace Generate
 
         if(m_points.find(lookup_key) != m_points.end())
         {
-            /*unsigned long point_position_joined = m_points[lookup_key];
-
-            unsigned long mask_y = 0x00000000ffffffff;
-            unsigned long mask_x = ~mask_y;
-            unsigned long extract_x = (point_position_joined & mask_x) >> 32;
-            unsigned long extract_y = point_position_joined & mask_y;
-
-            _outputX = *((float*)&extract_x);
-            _outputY = *((float*)&extract_y);*/
             std::pair<float, float> point_position = m_points[lookup_key];
             _outputX = point_position.first;
             _outputY = point_position.second;
@@ -59,11 +50,6 @@ namespace Generate
         float generate_point_x = Utils::RandRange(_x * m_gridSize, (_x + 1) * m_gridSize);
         float generate_point_y = Utils::RandRange(_y * m_gridSize, (_y + 1) * m_gridSize);
 
-        unsigned long point_x_long = *((unsigned long*)&generate_point_x);
-        unsigned long point_y_long = *((unsigned long*)&generate_point_y);
-        unsigned long point_position = (point_x_long << 32) | point_y_long;
-
-        //m_points.insert({ lookup_key, point_position });
         m_points.insert({ lookup_key, { generate_point_x, generate_point_y }});
 
         _outputX = generate_point_x;

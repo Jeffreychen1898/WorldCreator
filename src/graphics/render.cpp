@@ -62,6 +62,26 @@ namespace Graphics
 		}
 	}
 
+	void Renderer::BindFrameBuffer(Graphics::FrameBuffer& _frameBuffer)
+	{
+		if(Graphics::FrameBuffer::s_currentFrameBuffer == _frameBuffer.GetId())
+			return;
+
+			m_opengl.MakeDrawCall(m_verticesArray, m_drawCallCount);
+
+			_frameBuffer.Bind();
+	}
+
+    void Renderer::BindDefaultFrameBuffer()
+	{
+		if(Graphics::FrameBuffer::s_currentFrameBuffer == 0)
+			return;
+		
+		m_opengl.MakeDrawCall(m_verticesArray, m_drawCallCount);
+
+		Graphics::FrameBuffer::BindDefault();
+	}
+
 	void Renderer::DrawPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices)
 	{
 		if(_indicesCount < MAX_INDICES && _vertexSize < MAX_VERTEX_SIZE)

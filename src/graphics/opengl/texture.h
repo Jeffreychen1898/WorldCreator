@@ -4,7 +4,6 @@
 #include <unordered_map>
 
 #include <glad.h>
-#include <GLFW/glfw3.h>
 
 #define TEX_S_CLAMP_EDGE     0x80      // 1000 0000
 #define TEX_S_REPEAT         0x00      // 0000 0000
@@ -34,5 +33,6 @@ namespace Graphics {
             void Create(const char* _path, unsigned char _settings=TEX_SETTING_DEFAULT) {}; // not implemented just yet
 
             void Bind(unsigned int _texSlot);
+            unsigned int GetId() const { return m_textureId; };
     };
 }

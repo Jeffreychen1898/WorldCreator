@@ -14,6 +14,7 @@
 #include "../utils/verticesArray.h"
 #include "camera.h"
 #include "opengl/texture.h"
+#include "opengl/frameBuffer.h"
 
 namespace Graphics
 {
@@ -51,6 +52,8 @@ namespace Graphics
             Graphics::Camera3D* GetDefaultCamera() { return &m_defaultCamera; };
 
             void BindShader(Graphics::Shader& _shader);
+            void BindFrameBuffer(Graphics::FrameBuffer& _frameBuffer);
+            void BindDefaultFrameBuffer();
             void BindDefaultShader() { BindShader(m_defaultShader); };
 
             void Fill(float _brightness) { Fill(_brightness, _brightness, _brightness, 255); };

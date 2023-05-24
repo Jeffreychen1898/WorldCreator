@@ -1,9 +1,8 @@
 /*
-		NOTE TO SELF
-			if shape is 2 big, split into multiple batches
-			refactor any ugly code
-			code review
-			draw diagram for code architechure
+		To Do
+			Add UI
+			Create a cache class to store all objects rendered to a scene
+			Low priority: add support for large shapes w/ (vertex or index) > batch size
 */
 
 #include <iostream>
@@ -14,6 +13,12 @@
 #include "utils/helperFunctions.h"
 #include "generate/perlinNoise.h"
 #include "generate/worleyNoise.h"
+#include "graphics/opengl/frameBuffer.h"
+#include "ui/userInterface.h"
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #define CAMERA_ROTATE_SPEED 0.005
 #define CAMERA_ZOOM_SPEED 0.1
@@ -35,6 +40,10 @@ int main()
 
 	renderer.GetDefaultCamera()->SetCenter(0, 0, 0);
 	renderer.GetDefaultCamera()->SetPosition(0, 0, 20);
+
+	/* initialize ImGui */
+	UI::UserInterface ui;
+	ui.Init(window.GetWindow(), "#version 330 core");
 
 	/* create a new shader to handle this surface */
 	Graphics::Shader surface_shader;
@@ -86,35 +95,58 @@ int main()
 			counter += 6;
 		}
 	}
+	/* generate frame buffer */
+	Graphics::FrameBuffer test_buffer(4);
+	test_buffer.Create(1024, 768);
+
+	ui.SetMainFrameBuffer(test_buffer.GetTexture()->GetId());
 
 	renderer.BindDefaultShader();
 	while(window.IsOpen())
 	{
 		window.StartOfFrame();
 		renderer.StartOfFrame();
+		ui.StartOfFrame(window.GetWidth(), window.GetHeight());
 
-		/* rotate by mouse drag */
-		if(window.IsMousePressed(GLFW_MOUSE_BUTTON_LEFT))
+		test_buffer.Clear();
+
+		if(ui.GetFocusedWindow() == "Display")
 		{
-			renderer.GetDefaultCamera()->RotateHorizontal(CAMERA_ROTATE_SPEED * (window.GetMouseX() - window.GetPreviousMouseX()));
-			renderer.GetDefaultCamera()->RotateVertical(CAMERA_ROTATE_SPEED * (window.GetMouseY() - window.GetPreviousMouseY()));
-		}
+			/* rotate by mouse drag */
+			if(window.IsMousePressed(GLFW_MOUSE_BUTTON_LEFT))
+			{
+				renderer.GetDefaultCamera()->RotateHorizontal(CAMERA_ROTATE_SPEED * (window.GetMouseX() - window.GetPreviousMouseX()));
+				renderer.GetDefaultCamera()->RotateVertical(CAMERA_ROTATE_SPEED * (window.GetMouseY() - window.GetPreviousMouseY()));
+			}
 
-		/* scrolling moves the camera in and out */
-		double camera_zoom_amount = CAMERA_ZOOM_SPEED * renderer.GetDefaultCamera()->GetPositionCenterDistance();
-		renderer.GetDefaultCamera()->MoveForward(window.GetDeltaScrollPosition() * camera_zoom_amount, false);
-		
-		renderer.GetDefaultCamera()->Update();
+			/* scrolling moves the camera in and out */
+			double camera_zoom_amount = CAMERA_ZOOM_SPEED * renderer.GetDefaultCamera()->GetPositionCenterDistance();
+			renderer.GetDefaultCamera()->MoveForward(window.GetDeltaScrollPosition() * camera_zoom_amount, false);
+			
+			renderer.GetDefaultCamera()->Update();
+		}
 
 		/* generate the vertices */
 
+		/*renderer.BindFrameBuffer(test_buffer);
 		renderer.Fill(255, 255);
-		renderer.DrawImage(surface_texture, -10, -10, 20, 20);
+		renderer.DrawImage(surface_texture, -10, -10, 20, 20);*/
 
+		//renderer.BindDefaultFrameBuffer();
+		renderer.BindFrameBuffer(test_buffer);
 		renderer.BindShader(surface_shader);
 		renderer.DrawPolygons(surface_x_sample_count * surface_z_sample_count * 3, surface_vertices, counter, surface_indices);
+		
+		/*renderer.BindDefaultFrameBuffer();
+		renderer.Fill(255, 255, 0);
+		renderer.DrawImage(*test_buffer.GetTexture(), -10, -10, 20, 20);*/
+
+		renderer.BindDefaultFrameBuffer();
+		ui.DisplayUI();
 
 		renderer.EndOfFrame();
+
+		ui.EndOfFrame();
 
 		//std::cout << renderer.GetDrawCallCount() << std::endl;
 

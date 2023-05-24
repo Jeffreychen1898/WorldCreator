@@ -13,10 +13,16 @@ namespace Graphics
         glDepthFunc(GL_LEQUAL);
 
         glEnable(GL_TEXTURE_2D);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     void Opengl::ClearBuffers()
     {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        Graphics::FrameBuffer::s_currentFrameBuffer = 0;
+        glClearColor(0.f, 0.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 

@@ -5,6 +5,7 @@
 
 #include "shader.h"
 #include "../../utils/verticesArray.h"
+#include "frameBuffer.h"
 
 namespace Graphics
 {
