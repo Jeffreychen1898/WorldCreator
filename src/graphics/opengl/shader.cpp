@@ -90,6 +90,18 @@ namespace Graphics
             case UNIFORM_INT:
                 glUniform1i(uniform_location, (int)(*_data));
                 break;
+            case UNIFORM_VEC4:
+                glUniform4f(uniform_location, *_data, *(_data + 1), *(_data + 2), *(_data + 3));
+                break;
+            case UNIFORM_VEC3:
+                glUniform3f(uniform_location, *_data, *(_data + 1), *(_data + 2));
+                break;
+            case UNIFORM_VEC2:
+                glUniform2f(uniform_location, *_data, *(_data + 1));
+                break;
+            case UNIFORM_FLOAT:
+                glUniform1f(uniform_location, *_data);
+                break;
         }
     }
 
@@ -219,5 +231,32 @@ namespace Graphics
     {
         for(unsigned int i=0;i<16;++i)
             m_data[i] = (i % 5 == 0) ? 1 : 0;
+    }
+
+    FloatContainer::FloatContainer()
+        : ShaderUniformContainer(UNIFORM_FLOAT)
+    {
+        m_data[0] = 0.f;
+    }
+
+    Vec2Container::Vec2Container()
+        : ShaderUniformContainer(UNIFORM_VEC2)
+    {
+        for(unsigned int i=0;i<2;++i)
+            m_data[i] = 0.f;
+    }
+
+    Vec3Container::Vec3Container()
+        : ShaderUniformContainer(UNIFORM_VEC3)
+    {
+        for(unsigned int i=0;i<3;++i)
+            m_data[i] = 0.f;
+    }
+
+    Vec4Container::Vec4Container()
+        : ShaderUniformContainer(UNIFORM_VEC4)
+    {
+        for(unsigned int i=0;i<4;++i)
+            m_data[i] = 0.f;
     }
 }

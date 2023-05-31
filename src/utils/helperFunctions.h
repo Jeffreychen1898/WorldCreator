@@ -16,6 +16,8 @@ namespace Utils
     float RandRange(float _lower, float _upper);
 
     int Floor(float _value);
+    float ToRad(float _ang);
+    float ToDeg(float _ang);
 
     float Qrsqrt(float _number); /* using the famous quick inverse sqrt function :D */
     float Qsqrt(float _number);

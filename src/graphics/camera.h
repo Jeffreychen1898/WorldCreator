@@ -40,6 +40,7 @@ namespace Graphics
             void RotateHorizontal(float _angle); /* angle must be in the range (-90 deg, 90 deg) */
 
             double GetPositionCenterDistance() const { return glm::length(m_position - m_center); };
+            glm::vec3 GetPosition() { return m_position; };
 
             void Update();
 

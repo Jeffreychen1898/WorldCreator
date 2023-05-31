@@ -12,6 +12,10 @@
 
 #define UNIFORM_MAT4 0
 #define UNIFORM_INT 1
+#define UNIFORM_VEC4 2
+#define UNIFORM_VEC3 3
+#define UNIFORM_VEC2 4
+#define UNIFORM_FLOAT 5
 
 namespace Graphics
 {
@@ -47,6 +51,58 @@ namespace Graphics
             float* GetData() { return m_data; };
 
             void SetData(float* _data) { memcpy(m_data, _data, sizeof(float) * 16); SetAllNotUpdated(); };
+    };
+
+    class FloatContainer : public ShaderUniformContainer
+    {
+        private:
+            float m_data[1];
+
+        public:
+            FloatContainer();
+
+            float* GetData() { return m_data; };
+
+            void SetData(float _data) { m_data[0] = _data; SetAllNotUpdated(); };
+    };
+
+    class Vec2Container : public ShaderUniformContainer
+    {
+        private:
+            float m_data[2];
+
+        public:
+            Vec2Container();
+
+            float* GetData() { return m_data; };
+
+            void SetData(float* _data) { memcpy(m_data, _data, sizeof(float) * 2); SetAllNotUpdated(); };
+    };
+
+    class Vec3Container : public ShaderUniformContainer
+    {
+        private:
+            float m_data[3];
+
+        public:
+            Vec3Container();
+
+            float* GetData() { return m_data; };
+
+            void SetData(float* _data) { memcpy(m_data, _data, sizeof(float) * 3); SetAllNotUpdated(); };
+    };
+
+    class Vec4Container : public ShaderUniformContainer
+    {
+        private:
+            float m_data[4];
+
+        public:
+            Vec4Container();
+
+            float* GetData() { return m_data; };
+
+            void SetData(float* _data) { memcpy(m_data, _data, sizeof(float) * 4); SetAllNotUpdated(); };
     };
 
     class Shader

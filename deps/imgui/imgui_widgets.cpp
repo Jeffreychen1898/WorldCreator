@@ -2472,8 +2472,9 @@ bool ImGui::DragScalar(const char* label, ImGuiDataType data_type, void* p_data,
         LogSetNextTextDecoration("{", "}");
     RenderTextClipped(frame_bb.Min, frame_bb.Max, value_buf, value_buf_end, NULL, ImVec2(0.5f, 0.5f));
 
-    if (label_size.x > 0.0f)
-        RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);
+    // --> MODIFIED BELOW
+    /*if (label_size.x > 0.0f)
+        RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);*/
 
     IMGUI_TEST_ENGINE_ITEM_INFO(id, label, g.LastItemData.StatusFlags | (temp_input_allowed ? ImGuiItemStatusFlags_Inputable : 0));
     return value_changed;
@@ -3060,8 +3061,9 @@ bool ImGui::SliderScalar(const char* label, ImGuiDataType data_type, void* p_dat
         LogSetNextTextDecoration("{", "}");
     RenderTextClipped(frame_bb.Min, frame_bb.Max, value_buf, value_buf_end, NULL, ImVec2(0.5f, 0.5f));
 
-    if (label_size.x > 0.0f)
-        RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);
+    // --> MODIFIED BELOW
+    /*if (label_size.x > 0.0f)
+        RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);*/
 
     IMGUI_TEST_ENGINE_ITEM_INFO(id, label, g.LastItemData.StatusFlags | (temp_input_allowed ? ImGuiItemStatusFlags_Inputable : 0));
     return value_changed;
@@ -5262,14 +5264,15 @@ bool ImGui::ColorEdit4(const char* label, float col[4], ImGuiColorEditFlags flag
         }
     }
 
-    if (label != label_display_end && !(flags & ImGuiColorEditFlags_NoLabel))
+    // --> MODIFIED BELOW
+    /*if (label != label_display_end && !(flags & ImGuiColorEditFlags_NoLabel))
     {
         // Position not necessarily next to last submitted button (e.g. if style.ColorButtonPosition == ImGuiDir_Left),
         // but we need to use SameLine() to setup baseline correctly. Might want to refactor SameLine() to simplify this.
         SameLine(0.0f, style.ItemInnerSpacing.x);
         window->DC.CursorPos.x = pos.x + ((flags & ImGuiColorEditFlags_NoInputs) ? w_button : w_full + style.ItemInnerSpacing.x);
         TextEx(label, label_display_end);
-    }
+    }*/
 
     // Convert back
     if (value_changed && picker_active_window == NULL)

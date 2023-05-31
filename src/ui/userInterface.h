@@ -9,6 +9,8 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+#include "uiTools.h"
+
 namespace UI
 {
     class UserInterface
@@ -27,10 +29,16 @@ namespace UI
 
             ImGuiWindowFlags m_mainWindowFlags;
 
+            unsigned int m_folderImageRes;
+
             unsigned int m_mainFramebuffer;
             float m_mainFrameBufferAspectRatio;
 
             std::string m_windowFocused;
+
+            float m_sunDistance;
+
+            UI::UITools m_uiTools;
         public:
             UserInterface();
             ~UserInterface();
@@ -40,9 +48,12 @@ namespace UI
             void EndOfFrame();
             void DisplayUI();
 
+            void SetFolderImgRes(unsigned int _textureId) { m_folderImageRes = _textureId; };
             void SetMainFrameBuffer(unsigned int _frameBuffer) { m_mainFramebuffer = _frameBuffer; };
 
             std::string GetFocusedWindow() const { return m_windowFocused; };
+
+            UI::UITools& GetToolsUI() { return m_uiTools; };
         
         private:
             void CreateWindow(const char* _windowName, ImGuiWindowFlags _windowFlags);

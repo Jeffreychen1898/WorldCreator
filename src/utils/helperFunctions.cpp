@@ -56,4 +56,14 @@ namespace Utils
     {
         return Utils::Qsqrt((_x2 - _x1) * (_x2 - _x1) + (_y2 - _y1) * (_y2 - _y1));
     }
+
+    float ToDeg(float _ang)
+    {
+        return _ang * 180.f / PI;
+    }
+
+    float ToRad(float _ang)
+    {
+        return _ang * PI / 180.f;
+    }
 }

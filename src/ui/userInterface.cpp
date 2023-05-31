@@ -4,7 +4,7 @@ namespace UI
 {
     UserInterface::UserInterface()
         : m_mainFrameBufferAspectRatio(1024.f / 768.f), m_toolsWidth(300), m_propertiesWidth(300), m_isPropertiesWidthSet(false),
-        m_isToolsWidthSet(false), m_isResHeightSet(false), m_resHeight(300)
+        m_isToolsWidthSet(false), m_isResHeightSet(false), m_resHeight(300), m_folderImageRes(0)
     {
         m_mainWindowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus;
         m_windowFocused = "";
@@ -39,7 +39,7 @@ namespace UI
         DisplayRenderWindow();
         DisplayResWindow();
 
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
     }
 
     void UserInterface::DisplayRenderWindow()
@@ -97,11 +97,43 @@ namespace UI
 		CreateWindow("Resources", m_mainWindowFlags);
 
         m_resHeight = ImGui::GetWindowSize().y;
-		ImGui::Text("Hello World!");
-		if(ImGui::Button("Click Me"))
-		{
-			std::cout << "Hello World" << std::endl;
-		}
+
+        /* create the buttons */
+        ImVec2 button_size(75, 75);
+        ImVec2 uv_min(0, 1);
+        ImVec2 uv_max(1, 0);
+        float button_padding = 5;
+        unsigned int button_spacing = 20;
+        ImColor button_color(255, 255, 255, 255);
+
+        unsigned int available_width = ImGui::GetContentRegionAvail().x;
+        unsigned int items_per_row = static_cast<unsigned int>((available_width + button_spacing + 2 * button_padding) / (button_size.x + button_spacing + 2 * button_padding));
+
+        ImGui::BeginTable("resources_table", items_per_row);
+        for(unsigned int i=0;i<items_per_row;++i)
+            ImGui::TableSetupColumn("Column 1");
+
+        ImGui::TableNextRow();
+        for(unsigned int i=0;i<20;++i)
+        {
+            ImGui::TableNextColumn();
+            ImGui::ImageButton(
+                reinterpret_cast<ImTextureID>(m_folderImageRes),
+                button_size,
+                uv_min,
+                uv_max,
+                button_padding,
+                button_color,
+                ImColor(255, 255, 255, 255)
+            );
+
+            ImGui::Text("Label %d", i);
+
+            if((i + 1) % items_per_row == 0)
+                ImGui::TableNextRow();
+        }
+        ImGui::EndTable();
+		
 		ImGui::End();
     }
 
@@ -120,11 +152,9 @@ namespace UI
 		CreateWindow("Tools", m_mainWindowFlags);
 
         m_toolsWidth = ImGui::GetWindowSize().x;
-		ImGui::Text("Hello World!");
-		if(ImGui::Button("Click Me"))
-		{
-			std::cout << "Hello World" << std::endl;
-		}
+
+        m_uiTools.DisplayUI();
+
 		ImGui::End();
     }
 
@@ -153,7 +183,7 @@ namespace UI
 
     void UserInterface::CreateWindow(const char* _windowName, ImGuiWindowFlags _windowFlags)
     {
-        ImGui::Begin(_windowName, nullptr, m_mainWindowFlags);
+        ImGui::Begin(_windowName, nullptr, _windowFlags);
         if(ImGui::IsWindowFocused())
             m_windowFocused = _windowName;
     }
