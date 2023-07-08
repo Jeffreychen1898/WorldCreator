@@ -3,12 +3,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cmath>
 
 #include <glad.h>
 #include <GLFW/glfw3.h>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
+#include "../utils/verticesArray.h"
 #include "opengl/shader.h"
 #include "opengl/opengl.h"
 #include "../utils/verticesArray.h"

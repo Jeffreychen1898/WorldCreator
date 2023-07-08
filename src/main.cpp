@@ -37,7 +37,7 @@ int main()
 	if(!window.Init())
 		return -1;
 
-	Graphics::Renderer renderer(1, 5000);
+	Graphics::Renderer renderer(1, 500000);
 	renderer.Init();
 
 	renderer.GetDefaultCamera()->SetCenter(0, 0, 0);
@@ -81,8 +81,8 @@ int main()
 	//camera_position.SetData(camera_position_raw);
 
 	/* create a texture to display perlin noise */
-	unsigned int surface_x_sample_count = 20;
-	unsigned int surface_z_sample_count = 20;
+	unsigned int surface_x_sample_count = 200;
+	unsigned int surface_z_sample_count = 200;
 
 	Generate::PerlinNoise2D new_perlin_noise(10);
 	unsigned char texture_data[surface_x_sample_count * surface_z_sample_count];

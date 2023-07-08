@@ -4,6 +4,9 @@
 
 #define PI 3.1415926535
 
+#define MAX_INDICES 10000
+#define MAX_VERTEX_SIZE 50000
+
 namespace Utils
 {
     static std::uniform_real_distribution<float>* g_randomDistribution;

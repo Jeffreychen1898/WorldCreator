@@ -33,11 +33,11 @@ namespace Graphics
 
         ++ _drawCallCount;
         Graphics::Shader* shader_program = Graphics::Shader::s_currentShaderPtr;
-        unsigned int vertex_count = (unsigned int)(_verticesArray.GetVertexSize() / shader_program->GetVertexSize());
+        unsigned int vertex_count = (unsigned int)(_verticesArray.GetVertexCount() / shader_program->GetVertexSize());
         shader_program->AttributeData(vertex_count, _verticesArray.GetVerticesData());
-		shader_program->IndexBufferData(_verticesArray.GetIndicesSize(), _verticesArray.GetIndicesData());
+		shader_program->IndexBufferData(_verticesArray.GetIndicesCount(), _verticesArray.GetIndicesData());
 
-        glDrawElements(GL_TRIANGLES, _verticesArray.GetIndicesSize(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, _verticesArray.GetIndicesCount(), GL_UNSIGNED_INT, 0);
         _verticesArray.Clear();
 
         /* call bind to update all of the uniforms that have not been updated */

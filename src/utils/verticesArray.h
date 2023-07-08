@@ -2,8 +2,7 @@
 
 #include <cstring>
 
-#define MAX_INDICES 10000
-#define MAX_VERTEX_SIZE 50000
+#include "helperFunctions.h"
 
 #include "../graphics/opengl/shader.h"
 
@@ -29,9 +28,10 @@ namespace Utils
             void Clear();
 
             bool IsEmpty() const { return m_indicesCounter < 3; };
-            unsigned int GetVertexSize() const { return m_vertexCounter; };
-            unsigned int GetIndicesSize() const { return m_indicesCounter; };
+            unsigned int GetVertexCount() const { return m_vertexCounter; };
+            unsigned int GetIndicesCount() const { return m_indicesCounter; };
             float* GetVerticesData() { return m_vertexData; };
             unsigned int* GetIndicesData() { return m_indicesData; };
+            unsigned int GetVertexSize() const { return m_vertexSize; };
     };
 }
