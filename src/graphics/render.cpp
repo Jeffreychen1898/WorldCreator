@@ -105,8 +105,8 @@ namespace Graphics
 		unsigned int estimated_vertex_space_needed = std::max(estimated_load_size * vertex_size * 3, MAX_VERTEX_SIZE);
 		unsigned int estsimated_indices_space_needed = std::max(estimated_load_size * 3, MAX_INDICES);
 
-		float relevant_vertices[estimated_vertex_space_needed];
-		unsigned int relevant_indices[estsimated_indices_space_needed];
+		float* relevant_vertices = new float[estimated_vertex_space_needed];
+		unsigned int* relevant_indices = new unsigned int[estsimated_indices_space_needed];
 
 		// track which vertices are already in the list of vertices
 		std::unordered_map<unsigned int, unsigned int> vertices_present;
@@ -149,6 +149,9 @@ namespace Graphics
 			m_verticesArray.AddShape(i * 3 * vertex_size, relevant_vertices, load_size * 3, relevant_indices);
 			m_opengl.MakeDrawCall(m_verticesArray, m_drawCallCount);
 		}
+
+		delete[] relevant_vertices;
+		delete[] relevant_indices;
 	}
 
 	void Renderer::Fill(float _red, float _green, float _blue, float _alpha)

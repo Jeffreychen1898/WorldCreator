@@ -81,8 +81,8 @@ int main()
 	//camera_position.SetData(camera_position_raw);
 
 	/* create a texture to display perlin noise */
-	unsigned int surface_x_sample_count = 200;
-	unsigned int surface_z_sample_count = 200;
+	unsigned int surface_x_sample_count = 800;
+	unsigned int surface_z_sample_count = 800;
 
 	Generate::PerlinNoise2D new_perlin_noise(10);
 	unsigned char texture_data[surface_x_sample_count * surface_z_sample_count];
@@ -94,7 +94,7 @@ int main()
 	surface_texture.Create(1, surface_x_sample_count, surface_z_sample_count, texture_data, TEX_MAG_NEAREST);
 
 	/* generate the vertices of the surface */
-	float surface_vertices[surface_x_sample_count * surface_z_sample_count * 6];
+	float* surface_vertices = new float[surface_x_sample_count * surface_z_sample_count * 6];
 	for(unsigned int i=0;i<surface_z_sample_count;++i)
 	{
 		for(unsigned int j=0;j<surface_x_sample_count;++j)
@@ -128,7 +128,7 @@ int main()
 
 	/* generate the indices of the surface */
 	unsigned int counter = 0;
-	unsigned int surface_indices[2 * (surface_x_sample_count - 1) * (surface_z_sample_count - 1) * 3];
+	unsigned int* surface_indices = new unsigned int[2 * (surface_x_sample_count - 1) * (surface_z_sample_count - 1) * 3];
 	for(unsigned int i=0;i<surface_z_sample_count-1;++i)
 	{
 		for(unsigned int j=0;j<surface_x_sample_count-1;++j)
@@ -214,6 +214,8 @@ int main()
 	}
 
 	Utils::HelperClose();
+	delete[] surface_vertices;
+	delete[] surface_indices;
 
 	return 0;
 }
