@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#include <unordered_map>
 
 #include <glad.h>
 #include <GLFW/glfw3.h>
@@ -66,6 +67,7 @@ namespace Graphics
             void DrawRect(float _x, float _y, float _width, float _height) { DrawImage(m_defaultTexture, _x, _y, _width, _height); };
             void DrawImage(Graphics::Texture& _texture, float _x, float _y, float _width, float _height);
             void DrawPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices);
+            void DrawSmallPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices);
 
             unsigned int GetDrawCallCount() const { return m_drawCallCount; };
 

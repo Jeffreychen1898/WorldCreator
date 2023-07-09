@@ -4,8 +4,8 @@
 
 #define PI 3.1415926535
 
-#define MAX_INDICES 10000
-#define MAX_VERTEX_SIZE 50000
+#define MAX_INDICES 10000U
+#define MAX_VERTEX_SIZE 50000U
 
 namespace Utils
 {

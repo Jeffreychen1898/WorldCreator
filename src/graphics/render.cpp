@@ -82,9 +82,9 @@ namespace Graphics
 		Graphics::FrameBuffer::BindDefault();
 	}
 
-	void Renderer::DrawPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices)
+	void Renderer::DrawSmallPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices)
 	{
-		/*if(_indicesCount < MAX_INDICES && _vertexSize < MAX_VERTEX_SIZE)
+		if(_indicesCount < MAX_INDICES && _vertexSize < MAX_VERTEX_SIZE)
 		{
 			if(!m_verticesArray.AddShape(_vertexSize, _vertices, _indicesCount, _indices))
 			{
@@ -92,39 +92,49 @@ namespace Graphics
 				m_verticesArray.AddShape(_vertexSize, _vertices, _indicesCount, _indices);
 			}
 			return;
-		}*/
+		}
+	}
 
+	void Renderer::DrawPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices)
+	{
 		// could be more optimized
-		float* relevant_vertices = new float[MAX_VERTEX_SIZE];
-		unsigned int* relevant_indices = new unsigned int[MAX_INDICES];
+		// units for load is in number of triangles
 		unsigned int vertex_size = m_verticesArray.GetVertexSize();
+
+		unsigned int estimated_load_size = std::min(_indicesCount / 3, std::min(MAX_INDICES / 3, MAX_VERTEX_SIZE / vertex_size / 3));
+		unsigned int estimated_vertex_space_needed = std::max(estimated_load_size * vertex_size * 3, MAX_VERTEX_SIZE);
+		unsigned int estsimated_indices_space_needed = std::max(estimated_load_size * 3, MAX_INDICES);
+
+		float relevant_vertices[estimated_vertex_space_needed];
+		unsigned int relevant_indices[estsimated_indices_space_needed];
+
+		// track which vertices are already in the list of vertices
+		std::unordered_map<unsigned int, unsigned int> vertices_present;
 		unsigned int triangles_processed = 0;
 
-		int test = 0;
 		while(triangles_processed < _indicesCount / 3)
 		{
+			// calculate the size of the load that this iteration will take on
 			unsigned int indices_space = MAX_INDICES - m_verticesArray.GetIndicesCount();
 			unsigned int vertices_space = MAX_VERTEX_SIZE - m_verticesArray.GetVertexCount();
 
 			unsigned int load_size = std::min((_indicesCount - triangles_processed * 3) / 3, std::min(indices_space / 3, vertices_space / vertex_size / 3)); // in triangles
 			
-			// copy the relevant vertices
-			unsigned int first_indices_location = triangles_processed * 3;
+			unsigned int first_index_location = triangles_processed * 3;
 
+			// after the loop, "i" is the true load size, taking into account the number of vertices that could be stored
 			unsigned int i;
 			for(i=0;i<load_size;++i)
 			{
-				unsigned int k = i + triangles_processed;
-				//std::cout << vertices_space << " : " << (i + 1) * 3 * vertex_size << std::endl;
+				// make sure there is enough space to store these vertices
 				if(vertices_space < (i + 1) * 3 * vertex_size)
 					break;
 				
-				unsigned int first_index = _indices[first_indices_location + i * 3];
-				unsigned int second_index = _indices[first_indices_location + i * 3 + 1];
-				unsigned int third_index = _indices[first_indices_location + i * 3 + 2];
+				unsigned int first_index = _indices[first_index_location + i * 3];
+				unsigned int second_index = _indices[first_index_location + i * 3 + 1];
+				unsigned int third_index = _indices[first_index_location + i * 3 + 2];
 
-				//std::cout << first_indices_location + i * 3 << " : " << load_size << std::endl;
-				//memcpy src: _vertices[first_index * vertex_size] destination: relevant_vertices[i * 3 * vertex_size], size: vertex_size
+				// new destination is vertex_count (+0, +vertex_size, +2*vertex_size)
 				memcpy(relevant_vertices + i * 3 * vertex_size, _vertices + first_index * vertex_size, vertex_size * sizeof(float));
 				memcpy(relevant_vertices + (i * 3 + 1) * vertex_size, _vertices + second_index * vertex_size, vertex_size * sizeof(float));
 				memcpy(relevant_vertices + (i * 3 + 2) * vertex_size, _vertices + third_index * vertex_size, vertex_size * sizeof(float));
@@ -134,15 +144,11 @@ namespace Graphics
 				relevant_indices[3 * i + 2] = i * 3 + 2;
 			}
 
-			//std::cout << i << std::endl;
-			load_size = i;
+			// make the draw call
 			triangles_processed += i;
-			m_verticesArray.AddShape(load_size * 3 * vertex_size, relevant_vertices, load_size * 3, relevant_indices);
+			m_verticesArray.AddShape(i * 3 * vertex_size, relevant_vertices, load_size * 3, relevant_indices);
 			m_opengl.MakeDrawCall(m_verticesArray, m_drawCallCount);
 		}
-
-		delete relevant_vertices;
-		delete relevant_indices;
 	}
 
 	void Renderer::Fill(float _red, float _green, float _blue, float _alpha)
