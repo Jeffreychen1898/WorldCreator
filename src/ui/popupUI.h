@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 namespace UI
 {
     class PopupUI
@@ -10,5 +12,5 @@ namespace UI
             ~PopupUI();
 
             void InvokePopup() const { std::cout << "popup invoked!" << std::endl; };
-    }
+    };
 }

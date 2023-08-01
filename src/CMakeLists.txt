@@ -8,6 +8,7 @@ add_subdirectory(graphics)
 add_subdirectory(utils)
 add_subdirectory(generate)
 add_subdirectory(ui)
+add_subdirectory(geometryCache)
 
 target_link_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src/graphics)
 target_link_libraries(${PROJECT_NAME} Graphics)
@@ -18,11 +19,14 @@ target_link_libraries(${PROJECT_NAME} Opengl)
 target_link_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src/utils)
 target_link_libraries(${PROJECT_NAME} Utils)
 
-target_link_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/generate)
+target_link_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src/generate)
 target_link_libraries(${PROJECT_NAME} Generate)
 
-target_link_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/ui)
+target_link_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src/ui)
 target_link_libraries(${PROJECT_NAME} UI)
+
+target_link_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src/geometryCache)
+target_link_libraries(${PROJECT_NAME} GeometryCache)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}/deps/imgui

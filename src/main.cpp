@@ -21,6 +21,7 @@
 #include "ui/userInterface.h"
 #include "utils/helperFunctions.h"
 #include "utils/performance.h"
+#include "geometryCache/geometryCache.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -85,6 +86,7 @@ int main()
 	surface_shader.AttachUniform("u_cameraPosition", camera_position);
 	//camera_position.SetData(camera_position_raw);
 
+	GeometryCache::ShapesCache shape_cache;
 	/* create a texture to display perlin noise */
 	unsigned int surface_x_sample_count = 100;
 	unsigned int surface_z_sample_count = 100;
@@ -148,6 +150,7 @@ int main()
 			counter += 6;
 		}
 	}
+	shape_cache.AppendShape("test_shape", surface_x_sample_count * surface_z_sample_count * 6, surface_vertices, counter, surface_indices);
 
 	/* create the cube to mark the lookat position */
 	float* lookat_vertices = new float[24];
@@ -289,7 +292,8 @@ int main()
 		//renderer.BindDefaultFrameBuffer();
 		renderer.BindFrameBuffer(test_buffer);
 		renderer.BindShader(surface_shader);
-		renderer.DrawPolygons(surface_x_sample_count * surface_z_sample_count * 6, surface_vertices, counter, surface_indices);
+		//renderer.DrawPolygons(surface_x_sample_count * surface_z_sample_count * 6, surface_vertices, counter, surface_indices);
+		shape_cache.RenderShapes(renderer);
 		renderer.DrawPolygons(24, lookat_vertices, 6, lookat_indices);
 		
 		/*renderer.BindDefaultFrameBuffer();
