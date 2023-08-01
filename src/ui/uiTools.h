@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <iostream>
 
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -26,7 +27,7 @@ namespace UI
             UITools();
             ~UITools();
 
-            void DisplayUI();
+            void DisplayUI(float _fps);
 
             float GetSunPositionX() const { return std::sin(Utils::ToRad(m_sunAngleTheta)) * std::cos(Utils::ToRad(m_sunAnglePhi)) * m_sunDistance; };
             float GetSunPositionY() const { return std::cos(Utils::ToRad(m_sunAngleTheta)) * m_sunDistance; };

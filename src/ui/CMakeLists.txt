@@ -1,6 +1,7 @@
 add_library(UI
     userInterface.cpp
     uiTools.cpp
+    popupUI.cpp
 )
 
 target_include_directories(UI PUBLIC

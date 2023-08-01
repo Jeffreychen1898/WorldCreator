@@ -43,6 +43,9 @@ namespace Graphics
             /* basic rendering things */
             float m_setColor[4];
 
+            float* m_polygonVertices;
+            unsigned int* m_polygonIndices;
+
         public:
             Renderer(float _near, float _far);
             ~Renderer();

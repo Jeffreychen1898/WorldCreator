@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <gtc/type_ptr.hpp>
+#include <chrono>
+#include <cmath>
 
 #include "graphics/render.h"
 #include "graphics/window.h"
@@ -17,6 +19,8 @@
 #include "generate/worleyNoise.h"
 #include "graphics/opengl/frameBuffer.h"
 #include "ui/userInterface.h"
+#include "utils/helperFunctions.h"
+#include "utils/performance.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -24,6 +28,7 @@
 
 #define CAMERA_ROTATE_SPEED 0.005
 #define CAMERA_ZOOM_SPEED 0.1
+#define CAMERA_MOVEMENT_SPEED 5.0
 
 int main()
 {
@@ -81,8 +86,8 @@ int main()
 	//camera_position.SetData(camera_position_raw);
 
 	/* create a texture to display perlin noise */
-	unsigned int surface_x_sample_count = 800;
-	unsigned int surface_z_sample_count = 800;
+	unsigned int surface_x_sample_count = 100;
+	unsigned int surface_z_sample_count = 100;
 
 	Generate::PerlinNoise2D new_perlin_noise(10);
 	unsigned char texture_data[surface_x_sample_count * surface_z_sample_count];
@@ -100,7 +105,7 @@ int main()
 		for(unsigned int j=0;j<surface_x_sample_count;++j)
 		{
 			unsigned int vertex_index = ((i * surface_x_sample_count) + j) * 6;
-			float height = new_perlin_noise.Sample((int)j, (int)i) * 400.f;
+			float height = new_perlin_noise.Sample((int)j, (int)i) * 300.f - 300.f;
 			surface_vertices[vertex_index + 0] = (float)j * 50.f - (25.f * surface_x_sample_count);
 			surface_vertices[vertex_index + 1] = height;
 			surface_vertices[vertex_index + 2] = (float)i * 50.f - (50.f * surface_z_sample_count);
@@ -143,6 +148,18 @@ int main()
 			counter += 6;
 		}
 	}
+
+	/* create the cube to mark the lookat position */
+	float* lookat_vertices = new float[24];
+	unsigned int* lookat_indices = new unsigned int[6];
+
+	lookat_indices[0] = 0;
+	lookat_indices[1] = 1;
+	lookat_indices[2] = 2;
+	lookat_indices[3] = 0;
+	lookat_indices[4] = 2;
+	lookat_indices[5] = 3;
+
 	/* generate frame buffer */
 	Graphics::FrameBuffer test_buffer(4);
 	test_buffer.Create(1024, 768);
@@ -151,11 +168,19 @@ int main()
 	ui.SetMainFrameBuffer(test_buffer.GetTexture()->GetId());
 
 	renderer.BindDefaultShader();
+
+	Utils::Performance timer;
+
 	while(window.IsOpen())
 	{
+		//std::cout << timer.GetFps() << std::endl;
+		float fps = timer.GetFps();
+		float dt = timer.Dt();
+		timer.ResetTime();
+
 		window.StartOfFrame();
 		renderer.StartOfFrame();
-		ui.StartOfFrame(window.GetWidth(), window.GetHeight());
+		ui.StartOfFrame(window.GetWidth(), window.GetHeight(), fps);
 
 		test_buffer.Clear();
 
@@ -169,8 +194,40 @@ int main()
 			}
 
 			/* scrolling moves the camera in and out */
+			double camera_distance = renderer.GetDefaultCamera()->GetPositionCenterDistance();
 			double camera_zoom_amount = CAMERA_ZOOM_SPEED * renderer.GetDefaultCamera()->GetPositionCenterDistance();
 			renderer.GetDefaultCamera()->MoveForward(window.GetDeltaScrollPosition() * camera_zoom_amount, false);
+
+			// wasd movements
+			if(window.IsKeyPressed(GLFW_KEY_A) || window.IsKeyPressed(GLFW_KEY_LEFT))
+			{
+				renderer.GetDefaultCamera()->MoveRight(-CAMERA_MOVEMENT_SPEED * camera_distance * dt);
+			}
+			if(window.IsKeyPressed(GLFW_KEY_D) || window.IsKeyPressed(GLFW_KEY_RIGHT))
+			{
+				renderer.GetDefaultCamera()->MoveRight(CAMERA_MOVEMENT_SPEED * camera_distance * dt);
+			}
+			if(window.IsKeyPressed(GLFW_KEY_LEFT_SHIFT) || window.IsKeyPressed(GLFW_KEY_RIGHT_SHIFT))
+			{
+				if(window.IsKeyPressed(GLFW_KEY_W) || window.IsKeyPressed(GLFW_KEY_UP))
+				{
+					renderer.GetDefaultCamera()->MoveCenterAndPosition(0, CAMERA_MOVEMENT_SPEED * camera_distance * dt, 0);
+				}
+				if(window.IsKeyPressed(GLFW_KEY_S) || window.IsKeyPressed(GLFW_KEY_DOWN))
+				{
+					renderer.GetDefaultCamera()->MoveCenterAndPosition(0, -CAMERA_MOVEMENT_SPEED * camera_distance * dt, 0);
+				}
+			} else {
+				if(window.IsKeyPressed(GLFW_KEY_W) || window.IsKeyPressed(GLFW_KEY_UP))
+				{
+					renderer.GetDefaultCamera()->MoveForwardXZPlane(CAMERA_MOVEMENT_SPEED * camera_distance * dt);
+				}
+				if(window.IsKeyPressed(GLFW_KEY_S) || window.IsKeyPressed(GLFW_KEY_DOWN))
+				{
+					renderer.GetDefaultCamera()->MoveForwardXZPlane(-CAMERA_MOVEMENT_SPEED * camera_distance * dt);
+				}
+				
+			}
 			
 			renderer.GetDefaultCamera()->Update();
 		}
@@ -186,6 +243,43 @@ int main()
 		float sun_col[] = { ui.GetToolsUI().GetSunColorRed(), ui.GetToolsUI().GetSunColorGreen(), ui.GetToolsUI().GetSunColorBlue() };
 		sun_color.SetData(sun_col);
 
+		/* create vertices for the lookat cube */
+		{
+			glm::vec3 center = renderer.GetDefaultCamera()->GetCenter();
+			float lookat_x = glm::dot(center, glm::vec3(1, 0, 0));
+			float lookat_y = glm::dot(center, glm::vec3(0, 1, 0));
+			float lookat_z = glm::dot(center, glm::vec3(0, 0, 1));
+			float lookat_size = 100;
+
+			lookat_vertices[0] = lookat_x - 0.5 * lookat_size;
+			lookat_vertices[1] = lookat_y + 0.5 * lookat_size;
+			lookat_vertices[2] = lookat_z;
+			lookat_vertices[3] = 0;
+			lookat_vertices[4] = 0;
+			lookat_vertices[5] = 1;
+
+			lookat_vertices[6] = lookat_x + 0.5 * lookat_size;
+			lookat_vertices[7] = lookat_y + 0.5 * lookat_size;
+			lookat_vertices[8] = lookat_z;
+			lookat_vertices[9] = 0;
+			lookat_vertices[10] = 0;
+			lookat_vertices[11] = 1;
+
+			lookat_vertices[12] = lookat_x + 0.5 * lookat_size;
+			lookat_vertices[13] = lookat_y - 0.5 * lookat_size;
+			lookat_vertices[14] = lookat_z;
+			lookat_vertices[15] = 0;
+			lookat_vertices[16] = 0;
+			lookat_vertices[17] = 1;
+
+			lookat_vertices[18] = lookat_x - 0.5 * lookat_size;
+			lookat_vertices[19] = lookat_y - 0.5 * lookat_size;
+			lookat_vertices[20] = lookat_z;
+			lookat_vertices[21] = 0;
+			lookat_vertices[22] = 0;
+			lookat_vertices[23] = 1;
+		}
+
 		/* generate the vertices */
 
 		/*renderer.BindFrameBuffer(test_buffer);
@@ -196,6 +290,7 @@ int main()
 		renderer.BindFrameBuffer(test_buffer);
 		renderer.BindShader(surface_shader);
 		renderer.DrawPolygons(surface_x_sample_count * surface_z_sample_count * 6, surface_vertices, counter, surface_indices);
+		renderer.DrawPolygons(24, lookat_vertices, 6, lookat_indices);
 		
 		/*renderer.BindDefaultFrameBuffer();
 		renderer.Fill(255, 255, 0);
@@ -216,6 +311,8 @@ int main()
 	Utils::HelperClose();
 	delete[] surface_vertices;
 	delete[] surface_indices;
+	delete[] lookat_vertices;
+	delete[] lookat_indices;
 
 	return 0;
 }

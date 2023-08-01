@@ -92,11 +92,28 @@ namespace Graphics
             m_center = m_center + (_amount * forward_direction);
     }
 
+    void Camera3D::MoveForwardXZPlane(float _amount, bool _adjustCenter)
+    {
+        glm::vec3 right_direction = glm::cross(m_center - m_position, m_upDir);
+        glm::vec3 forward_direction = glm::normalize(glm::cross(m_upDir, right_direction));
+        m_position = m_position + (_amount * forward_direction);
+        if(_adjustCenter)
+            m_center = m_center + (_amount * forward_direction);
+    }
+
     void Camera3D::MoveRight(float _amount, bool _adjustCenter)
     {
         glm::vec3 right_direction = glm::normalize(glm::cross(m_center - m_position, m_upDir));
         m_position = m_position + (_amount * right_direction);
         if(_adjustCenter)
             m_center = m_center + (_amount * right_direction);
+    }
+
+    double Camera3D::GetAngle(float _dirX, float _dirY, float _dirZ) const
+    {
+        glm::vec3 dir_vector = glm::normalize(glm::vec3(_dirX, _dirY, _dirZ));
+        glm::vec3 camera_dir = glm::normalize(m_center - m_position);
+
+        return acos(glm::dot(camera_dir, dir_vector));
     }
 }

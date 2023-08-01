@@ -8,6 +8,7 @@
 #include <gtx/io.hpp>
 
 #include "opengl/shader.h"
+#include "../utils/helperFunctions.h"
 
 namespace Graphics
 {
@@ -32,7 +33,9 @@ namespace Graphics
 
             void MovePosition(float _dx, float _dy, float _dz) { m_position = m_position + glm::vec3(_dx, _dy, _dz); };
             void MoveCenter(float _dx, float _dy, float _dz) { m_center = m_center + glm::vec3(_dx, _dy, _dz); };
+            void MoveCenterAndPosition(float _dx, float _dy, float _dz) { MoveCenter(_dx, _dy, _dz); MovePosition(_dx, _dy, _dz); };
             void MoveForward(float _amount, bool _adjustCenter=true);
+            void MoveForwardXZPlane(float _amount, bool _adjustCenter=true);
             void MoveRight(float _amount, bool _adjustCenter=true);
             void RotateCenterVertical(float _angle); /* angle must be in the range (-90 deg, 90 deg) */
             void RotateCenterHorizontal(float _angle); /* angle must be in the range (-90 deg, 90 deg) */
@@ -41,6 +44,8 @@ namespace Graphics
 
             double GetPositionCenterDistance() const { return glm::length(m_position - m_center); };
             glm::vec3 GetPosition() { return m_position; };
+            glm::vec3 GetCenter() { return m_center; };
+            double GetAngle(float _dirX, float _dirY, float _dirZ) const;
 
             void Update();
 

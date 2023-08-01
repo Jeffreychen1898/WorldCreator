@@ -9,6 +9,9 @@ namespace Graphics
 		m_setColor[1] = 0;
 		m_setColor[2] = 0;
 		m_setColor[3] = 0;
+
+		m_polygonVertices = new float[MAX_VERTEX_SIZE];
+		m_polygonIndices = new unsigned int[MAX_VERTEX_SIZE];
     }
 
     void Renderer::Init()
@@ -105,9 +108,6 @@ namespace Graphics
 		unsigned int estimated_vertex_space_needed = std::max(estimated_load_size * vertex_size * 3, MAX_VERTEX_SIZE);
 		unsigned int estsimated_indices_space_needed = std::max(estimated_load_size * 3, MAX_INDICES);
 
-		float* relevant_vertices = new float[estimated_vertex_space_needed];
-		unsigned int* relevant_indices = new unsigned int[estsimated_indices_space_needed];
-
 		// track which vertices are already in the list of vertices
 		std::unordered_map<unsigned int, unsigned int> vertices_present;
 		unsigned int triangles_processed = 0;
@@ -135,23 +135,20 @@ namespace Graphics
 				unsigned int third_index = _indices[first_index_location + i * 3 + 2];
 
 				// new destination is vertex_count (+0, +vertex_size, +2*vertex_size)
-				memcpy(relevant_vertices + i * 3 * vertex_size, _vertices + first_index * vertex_size, vertex_size * sizeof(float));
-				memcpy(relevant_vertices + (i * 3 + 1) * vertex_size, _vertices + second_index * vertex_size, vertex_size * sizeof(float));
-				memcpy(relevant_vertices + (i * 3 + 2) * vertex_size, _vertices + third_index * vertex_size, vertex_size * sizeof(float));
+				memcpy(m_polygonVertices + i * 3 * vertex_size, _vertices + first_index * vertex_size, vertex_size * sizeof(float));
+				memcpy(m_polygonVertices + (i * 3 + 1) * vertex_size, _vertices + second_index * vertex_size, vertex_size * sizeof(float));
+				memcpy(m_polygonVertices + (i * 3 + 2) * vertex_size, _vertices + third_index * vertex_size, vertex_size * sizeof(float));
 
-				relevant_indices[3 * i] = i * 3;
-				relevant_indices[3 * i + 1] = i * 3 + 1;
-				relevant_indices[3 * i + 2] = i * 3 + 2;
+				m_polygonIndices[3 * i] = i * 3;
+				m_polygonIndices[3 * i + 1] = i * 3 + 1;
+				m_polygonIndices[3 * i + 2] = i * 3 + 2;
 			}
 
 			// make the draw call
 			triangles_processed += i;
-			m_verticesArray.AddShape(i * 3 * vertex_size, relevant_vertices, load_size * 3, relevant_indices);
+			m_verticesArray.AddShape(i * 3 * vertex_size, m_polygonVertices, load_size * 3, m_polygonIndices);
 			m_opengl.MakeDrawCall(m_verticesArray, m_drawCallCount);
 		}
-
-		delete[] relevant_vertices;
-		delete[] relevant_indices;
 	}
 
 	void Renderer::Fill(float _red, float _green, float _blue, float _alpha)
@@ -192,5 +189,7 @@ namespace Graphics
 
     Renderer::~Renderer()
     {
+		delete[] m_polygonVertices;
+		delete[] m_polygonIndices;
     }
 }

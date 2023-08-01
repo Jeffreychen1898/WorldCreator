@@ -4,7 +4,7 @@ namespace UI
 {
     UserInterface::UserInterface()
         : m_mainFrameBufferAspectRatio(1024.f / 768.f), m_toolsWidth(300), m_propertiesWidth(300), m_isPropertiesWidthSet(false),
-        m_isToolsWidthSet(false), m_isResHeightSet(false), m_resHeight(300), m_folderImageRes(0)
+        m_isToolsWidthSet(false), m_isResHeightSet(false), m_resHeight(300), m_folderImageRes(0), m_fps(0)
     {
         m_mainWindowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus;
         m_windowFocused = "";
@@ -18,7 +18,7 @@ namespace UI
 	    ImGui::StyleColorsDark();
     }
 
-    void UserInterface::StartOfFrame(unsigned int _windowWidth, unsigned int _windowHeight)
+    void UserInterface::StartOfFrame(unsigned int _windowWidth, unsigned int _windowHeight, float _fps)
     {
         ImGui_ImplGlfw_NewFrame();
 		ImGui_ImplOpenGL3_NewFrame();
@@ -26,6 +26,7 @@ namespace UI
 
         m_windowWidth = _windowWidth;
         m_windowHeight = _windowHeight;
+        m_fps = _fps;
     }
 
     void UserInterface::DisplayUI()
@@ -153,7 +154,7 @@ namespace UI
 
         m_toolsWidth = ImGui::GetWindowSize().x;
 
-        m_uiTools.DisplayUI();
+        m_uiTools.DisplayUI(m_fps);
 
 		ImGui::End();
     }

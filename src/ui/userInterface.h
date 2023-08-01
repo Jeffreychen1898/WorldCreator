@@ -9,6 +9,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+#include "popupUI.h"
 #include "uiTools.h"
 
 namespace UI
@@ -18,7 +19,11 @@ namespace UI
         private:
             unsigned int m_windowWidth;
             unsigned int m_windowHeight;
+            float m_fps;
 
+            UI::PopupUI m_popupUI;
+
+            /* align the different tabs */
             unsigned int m_toolsWidth;
             unsigned int m_propertiesWidth;
             unsigned int m_resHeight;
@@ -38,13 +43,14 @@ namespace UI
 
             float m_sunDistance;
 
+            /* call the different classes to handle each tab */
             UI::UITools m_uiTools;
         public:
             UserInterface();
             ~UserInterface();
 
             void Init(GLFWwindow* _glfwWindow, const char* _glslVersion);
-            void StartOfFrame(unsigned int _windowWidth, unsigned int _windowHeight);
+            void StartOfFrame(unsigned int _windowWidth, unsigned int _windowHeight, float _fps);
             void EndOfFrame();
             void DisplayUI();
 

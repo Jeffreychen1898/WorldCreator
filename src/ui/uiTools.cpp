@@ -9,9 +9,12 @@ namespace UI
             m_sunColor[i] = 1.f;
     }
 
-    void UITools::DisplayUI()
+    void UITools::DisplayUI(float _fps)
     {
         ImGuiStyle& imgui_style = ImGui::GetStyle();
+
+        std::string frame_rate_string = "Frame Rate: " + std::to_string(_fps);
+        ImGui::Text(frame_rate_string.c_str());
 
         if(ImGui::CollapsingHeader("Rendering"))
         {
@@ -35,6 +38,22 @@ namespace UI
 
             ImGui::Text("Sun Color");
             ImGui::ColorEdit3("Sun Color", (float*)&m_sunColor);
+        }
+
+        if(ImGui::CollapsingHeader("Controls"))
+        {
+            ImGui::Text("Controls coming soon:");
+            ImGui::Text("\tMovement Speed");
+            ImGui::Text("\tSpeed Curve");
+            ImGui::Text("\tZoom Speed");
+            ImGui::Text("\tZoom Speed Curve");
+        }
+
+        if(ImGui::CollapsingHeader("Shapes"))
+        {
+            ImGui::Button("Surface");
+            ImGui::Button("Cube");
+            ImGui::Button("Sphere");
         }
     }
 
