@@ -1,5 +1,6 @@
 add_library(GeometryCache
     geometryCache.cpp
+    shape.cpp
 )
 
 target_include_directories(GeometryCache PUBLIC

@@ -11,6 +11,7 @@
 
 #include "popupUI.h"
 #include "uiTools.h"
+#include "../geometryCache/geometryCache.h"
 
 namespace UI
 {
@@ -22,6 +23,9 @@ namespace UI
             float m_fps;
 
             UI::PopupUI m_popupUI;
+
+            GeometryCache::ShapesCache* m_shapeCache;
+            float m_rotateX, m_rotateY, m_rotateZ;
 
             /* align the different tabs */
             unsigned int m_toolsWidth;
@@ -53,6 +57,8 @@ namespace UI
             void StartOfFrame(unsigned int _windowWidth, unsigned int _windowHeight, float _fps);
             void EndOfFrame();
             void DisplayUI();
+
+            void AddShapeCache(GeometryCache::ShapesCache& _cache) { m_shapeCache = &_cache; };
 
             void SetFolderImgRes(unsigned int _textureId) { m_folderImageRes = _textureId; };
             void SetMainFrameBuffer(unsigned int _frameBuffer) { m_mainFramebuffer = _frameBuffer; };

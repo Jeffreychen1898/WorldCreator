@@ -134,23 +134,25 @@ int main()
 	}
 
 	/* generate the indices of the surface */
-	unsigned int counter = 0;
 	unsigned int* surface_indices = new unsigned int[2 * (surface_x_sample_count - 1) * (surface_z_sample_count - 1) * 3];
 	for(unsigned int i=0;i<surface_z_sample_count-1;++i)
 	{
 		for(unsigned int j=0;j<surface_x_sample_count-1;++j)
 		{
+			unsigned int counter = 6 * (i * (surface_x_sample_count - 1) + j);
 			surface_indices[counter + 0] = surface_x_sample_count * i + j;
 			surface_indices[counter + 1] = surface_x_sample_count * i + j + 1;
 			surface_indices[counter + 2] = surface_x_sample_count * (i + 1) + j + 1;
 			surface_indices[counter + 3] = surface_x_sample_count * i + j;
 			surface_indices[counter + 4] = surface_x_sample_count * (i + 1) + j + 1;
 			surface_indices[counter + 5] = surface_x_sample_count * (i + 1) + j;
-
-			counter += 6;
 		}
 	}
-	shape_cache.AppendShape("test_shape", surface_x_sample_count * surface_z_sample_count * 6, surface_vertices, counter, surface_indices);
+	unsigned int cnter = (surface_x_sample_count - 1) * (surface_z_sample_count - 1) * 6;
+	shape_cache.AppendShape("test_shape", surface_x_sample_count * surface_z_sample_count * 6, surface_vertices, cnter, surface_indices);
+	shape_cache.AppendPlane("test_plane", 0, 300, 0);
+
+	ui.AddShapeCache(shape_cache);
 
 	/* create the cube to mark the lookat position */
 	float* lookat_vertices = new float[24];

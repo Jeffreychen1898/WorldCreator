@@ -50,34 +50,34 @@ namespace GeometryCache
         }
     }
 
+    bool ShapesCache::AppendPlane(const char* _name, float _x, float _y, float _z)
+    {
+        if(m_shapes->find(_name) != m_shapes->end())
+            return false;
+        
+        GeometryCache::Planes* new_plane = new GeometryCache::Planes();
+        new_plane->SetPosition(_x, _y, _z);
+        new_plane->SetRotation(0, 0, 0);
+        new_plane->SetDimensions(200, 200);
+        new_plane->Update();
+        new_plane->UpdateIndices();
+        m_shapes->insert({ _name, new_plane });
+        return true;
+    }
+
+    void ShapesCache::SetShapeRotation(const char* _name, float _x, float _y, float _z)
+    {
+        if(m_shapes->find(_name) == m_shapes->end())
+            return;
+        
+        m_shapes->at(_name)->SetRotation(_x, _y, _z);
+        m_shapes->at(_name)->Update();
+    }
+
     ShapesCache::~ShapesCache()
     {
         for(auto& each_shape : *m_shapes)
             delete each_shape.second;
         delete m_shapes;
-    }
-
-    /* shapes class */
-    Shapes::Shapes(unsigned int _verticesSize, unsigned int _indicesCount)
-        : m_verticesSize(_verticesSize), m_indicesCount(_indicesCount)
-    {
-        m_vertices = new float[_verticesSize];
-        m_indices = new unsigned int[_indicesCount];
-    }
-
-    void Shapes::SetVertices(float* _vertices)
-    {
-        memcpy(m_vertices, _vertices, sizeof(float) * m_verticesSize);
-    }
-
-    void Shapes::SetIndices(unsigned int* _indices)
-    {
-        memcpy(m_indices, _indices, sizeof(float) * m_indicesCount);
-    }
-
-    Shapes::~Shapes()
-    {
-        delete[] m_vertices;
-        delete[] m_indices;
     }
 }

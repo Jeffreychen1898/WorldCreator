@@ -8,6 +8,10 @@ namespace UI
     {
         m_mainWindowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus;
         m_windowFocused = "";
+
+        m_rotateX = 0;
+        m_rotateY = 0;
+        m_rotateZ = 0;
     }
 
     void UserInterface::Init(GLFWwindow* _glfwWindow, const char* _glslVersion)
@@ -179,6 +183,14 @@ namespace UI
 		{
 			std::cout << "Hello World" << std::endl;
 		}
+
+        /* test the shape rotations */
+        ImGui::DragFloat("Rotate X", &m_rotateX, 1.f, -360.f, 360.f, "%.2f");
+        ImGui::DragFloat("Rotate Y", &m_rotateY, 1.f, -360.f, 360.f, "%.2f");
+        ImGui::DragFloat("Rotate Z", &m_rotateZ, 1.f, -360.f, 360.f, "%.2f");
+
+        m_shapeCache->SetShapeRotation("test_plane", m_rotateX * 3.14 / 360.0, m_rotateY * 3.14 / 360.0, m_rotateZ * 3.14 / 360.0);
+
 		ImGui::End();
     }
 

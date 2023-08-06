@@ -2,32 +2,11 @@
 
 #include <unordered_map>
 
+#include "shape.h"
 #include "../graphics/render.h"
 
 namespace GeometryCache
 {
-    class Shapes
-    {
-        private:
-            float* m_vertices;
-            unsigned int* m_indices;
-
-            unsigned int m_verticesSize;
-            unsigned int m_indicesCount;
-        public:
-            Shapes(unsigned int _verticesSize, unsigned int _indicesCount);
-            ~Shapes();
-
-            void SetVertices(float* _vertices);
-            void SetIndices(unsigned int* _indices);
-
-            unsigned int GetVerticesSize() const { return m_verticesSize; };
-            unsigned int GetIndicesCount() const { return m_indicesCount; };
-
-            float* GetVertices() { return m_vertices; };
-            unsigned int* GetIndices() { return m_indices; };
-    };
-
     class ShapesCache
     {
         private:
@@ -42,5 +21,9 @@ namespace GeometryCache
             bool Rename(const char* _name, const char* _newname);
 
             void RenderShapes(Graphics::Renderer& _renderer);
+
+            bool AppendPlane(const char* _name, float _x, float _y, float _z);
+
+            void SetShapeRotation(const char* _name, float _x, float _y, float _z);
     };
 }
