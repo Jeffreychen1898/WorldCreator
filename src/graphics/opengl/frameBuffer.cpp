@@ -47,14 +47,9 @@ namespace Graphics
     int FrameBuffer::ReadPixel(unsigned int _attachment, unsigned int _x, unsigned int _y)
     {
         m_textures[_attachment]->Bind(0);
-        unsigned int data[m_width * m_height];
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, data);
+        int data[m_width * m_height];
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RED_INTEGER, GL_INT, data);
 
-        for(unsigned int i=0;i<m_width * m_height;++i)
-        {
-            std::cout << data[_y * m_width + _x] << " ";
-        }
-        std::cout << std::endl;
         return data[_y * m_width + _x];
     }
 

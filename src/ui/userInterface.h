@@ -12,6 +12,12 @@
 #include "popupUI.h"
 #include "uiTools.h"
 #include "../geometryCache/geometryCache.h"
+#include "../graphics/window.h"
+#include "../graphics/render.h"
+
+#define CAMERA_ROTATE_SPEED 0.005
+#define CAMERA_ZOOM_SPEED 0.1
+#define CAMERA_MOVEMENT_SPEED 5.0
 
 namespace UI
 {
@@ -26,6 +32,13 @@ namespace UI
 
             GeometryCache::ShapesCache* m_shapeCache;
             float m_rotateX, m_rotateY, m_rotateZ;
+
+            Graphics::Window* m_window;
+            Graphics::Renderer* m_renderer;
+
+            /* rendering window stuff */
+            ImVec2 m_renderWindowSize;
+            ImVec2 m_renderWindowPosition;
 
             /* align the different tabs */
             unsigned int m_toolsWidth;
@@ -53,8 +66,9 @@ namespace UI
             UserInterface();
             ~UserInterface();
 
-            void Init(GLFWwindow* _glfwWindow, const char* _glslVersion);
+            void Init(Graphics::Window* _window, Graphics::Renderer* _renderer, const char* _glslVersion);
             void StartOfFrame(unsigned int _windowWidth, unsigned int _windowHeight, float _fps);
+            void Update(float _dt) { SetCameraControls(_dt); };
             void EndOfFrame();
             void DisplayUI();
 
@@ -74,5 +88,7 @@ namespace UI
             void DisplayRenderWindow();
             void DisplayResWindow();
             void DisplayPropertiesWindow();
+
+            void SetCameraControls(float _dt);
     };
 }

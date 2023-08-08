@@ -1,7 +1,7 @@
 #version 330 core
 
 layout(location = 0) out vec4 FragColor;
-layout(location = 1) out uint Id;
+layout(location = 1) out int Id;
 
 in vec3 v_position;
 in vec3 v_normal;
@@ -86,5 +86,5 @@ void main()
 	vec3 gamma_corrected = pow(tone_mapped, vec3(1.0 / v_gamma));
 	
 	FragColor = vec4(gamma_corrected, 1.0);
-	Id = 1u;
+	Id = 1;
 }

@@ -12,14 +12,20 @@ namespace UI
         m_rotateX = 0;
         m_rotateY = 0;
         m_rotateZ = 0;
+
+        m_renderWindowSize = ImVec2(0, 0);
+        m_renderWindowPosition = ImVec2(0, 0);
     }
 
-    void UserInterface::Init(GLFWwindow* _glfwWindow, const char* _glslVersion)
+    void UserInterface::Init(Graphics::Window* _window, Graphics::Renderer* _renderer, const char* _glslVersion)
     {
         ImGui::CreateContext();
-	    ImGui_ImplGlfw_InitForOpenGL(_glfwWindow, true);
+	    ImGui_ImplGlfw_InitForOpenGL(_window->GetWindow(), true);
 	    ImGui_ImplOpenGL3_Init(_glslVersion);
 	    ImGui::StyleColorsDark();
+
+        m_window = _window;
+        m_renderer = _renderer;
     }
 
     void UserInterface::StartOfFrame(unsigned int _windowWidth, unsigned int _windowHeight, float _fps)
@@ -63,24 +69,24 @@ namespace UI
         float calc_height_from_width = display_size.x / m_mainFrameBufferAspectRatio;
         float calc_width_from_height = display_size.y * m_mainFrameBufferAspectRatio;
 
-        float image_width, image_height;
-        float image_x = 0;
-        float image_y = 0;
         if(calc_width_from_height > display_size.x)
         {
-            image_width = display_size.x;
-            image_height = calc_height_from_width;
-            image_y = 0.5f * (display_size.y - calc_height_from_width);
+            m_renderWindowSize.x = display_size.x;
+            m_renderWindowSize.y = calc_height_from_width;
+            m_renderWindowPosition.x = 0.f;
+            m_renderWindowPosition.y = 0.5f * (display_size.y - calc_height_from_width);
         } else
         {
-            image_width = calc_width_from_height;
-            image_height = display_size.y;
-            image_x = 0.5f * (display_size.x - calc_width_from_height);
+            m_renderWindowSize.x = calc_width_from_height;
+            m_renderWindowSize.y = display_size.y;
+            m_renderWindowPosition.x = 0.5f * (display_size.x - calc_width_from_height);
+            m_renderWindowPosition.y = 0.f;
         }
 
+        std::cout << m_renderWindowPosition.x << " : " << m_renderWindowPosition.y << std::endl;
         /* display image */
-        ImGui::SetCursorPos(ImVec2(image_x, image_y));
-        ImGui::Image(reinterpret_cast<void*>(m_mainFramebuffer), ImVec2(image_width, image_height), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::SetCursorPos(ImVec2(m_renderWindowPosition.x, m_renderWindowPosition.y));
+        ImGui::Image(reinterpret_cast<void*>(m_mainFramebuffer), ImVec2(m_renderWindowSize.x, m_renderWindowSize.y), ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
 
         ImGui::PopStyleVar();
@@ -192,6 +198,57 @@ namespace UI
         m_shapeCache->SetShapeRotation("test_plane", m_rotateX * 3.14 / 360.0, m_rotateY * 3.14 / 360.0, m_rotateZ * 3.14 / 360.0);
 
 		ImGui::End();
+    }
+
+    void UserInterface::SetCameraControls(float _dt)
+    {
+        if(m_windowFocused == "Display")
+		{
+			/* rotate by mouse drag */
+			if(m_window->IsMousePressed(GLFW_MOUSE_BUTTON_LEFT))
+			{
+				m_renderer->GetDefaultCamera()->RotateHorizontal(CAMERA_ROTATE_SPEED * (m_window->GetMouseX() - m_window->GetPreviousMouseX()));
+				m_renderer->GetDefaultCamera()->RotateVertical(CAMERA_ROTATE_SPEED * (m_window->GetMouseY() - m_window->GetPreviousMouseY()));
+			}
+
+			/* scrolling moves the camera in and out */
+			double camera_distance = m_renderer->GetDefaultCamera()->GetPositionCenterDistance();
+			double camera_zoom_amount = CAMERA_ZOOM_SPEED * m_renderer->GetDefaultCamera()->GetPositionCenterDistance();
+			m_renderer->GetDefaultCamera()->MoveForward(m_window->GetDeltaScrollPosition() * camera_zoom_amount, false);
+
+			// wasd movements
+			if(m_window->IsKeyPressed(GLFW_KEY_A) || m_window->IsKeyPressed(GLFW_KEY_LEFT))
+			{
+				m_renderer->GetDefaultCamera()->MoveRight(-CAMERA_MOVEMENT_SPEED * camera_distance * _dt);
+			}
+			if(m_window->IsKeyPressed(GLFW_KEY_D) || m_window->IsKeyPressed(GLFW_KEY_RIGHT))
+			{
+				m_renderer->GetDefaultCamera()->MoveRight(CAMERA_MOVEMENT_SPEED * camera_distance * _dt);
+			}
+			if(m_window->IsKeyPressed(GLFW_KEY_LEFT_SHIFT) || m_window->IsKeyPressed(GLFW_KEY_RIGHT_SHIFT))
+			{
+				if(m_window->IsKeyPressed(GLFW_KEY_W) || m_window->IsKeyPressed(GLFW_KEY_UP))
+				{
+					m_renderer->GetDefaultCamera()->MoveCenterAndPosition(0, CAMERA_MOVEMENT_SPEED * camera_distance * _dt, 0);
+				}
+				if(m_window->IsKeyPressed(GLFW_KEY_S) || m_window->IsKeyPressed(GLFW_KEY_DOWN))
+				{
+					m_renderer->GetDefaultCamera()->MoveCenterAndPosition(0, -CAMERA_MOVEMENT_SPEED * camera_distance * _dt, 0);
+				}
+			} else {
+				if(m_window->IsKeyPressed(GLFW_KEY_W) || m_window->IsKeyPressed(GLFW_KEY_UP))
+				{
+					m_renderer->GetDefaultCamera()->MoveForwardXZPlane(CAMERA_MOVEMENT_SPEED * camera_distance * _dt);
+				}
+				if(m_window->IsKeyPressed(GLFW_KEY_S) || m_window->IsKeyPressed(GLFW_KEY_DOWN))
+				{
+					m_renderer->GetDefaultCamera()->MoveForwardXZPlane(-CAMERA_MOVEMENT_SPEED * camera_distance * _dt);
+				}
+				
+			}
+			
+			m_renderer->GetDefaultCamera()->Update();
+		}
     }
 
     void UserInterface::CreateWindow(const char* _windowName, ImGuiWindowFlags _windowFlags)

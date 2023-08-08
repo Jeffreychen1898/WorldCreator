@@ -38,16 +38,16 @@ namespace Graphics {
                 internal_format = GL_RGBA8;
                 break;
             case TEX_R_UI:
-                internal_format = GL_R32UI;
+                internal_format = GL_R32I;
                 break;
             case TEX_RG_UI:
-                internal_format = GL_RG32UI;
+                internal_format = GL_RG32I;
                 break;
             case TEX_RGB_UI:
-                internal_format = GL_RGB32UI;
+                internal_format = GL_RGB32I;
                 break;
             case TEX_RGBA_UI:
-                internal_format = GL_RGBA32UI;
+                internal_format = GL_RGBA32I;
                 break;
         }
 

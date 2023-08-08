@@ -27,10 +27,6 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-#define CAMERA_ROTATE_SPEED 0.005
-#define CAMERA_ZOOM_SPEED 0.1
-#define CAMERA_MOVEMENT_SPEED 5.0
-
 int main()
 {
 	#if DEBUG_MODE
@@ -51,7 +47,7 @@ int main()
 
 	/* initialize ImGui */
 	UI::UserInterface ui;
-	ui.Init(window.GetWindow(), "#version 330 core");
+	ui.Init(&window, &renderer, "#version 330 core");
 
 	/* create a new shader to handle this surface */
 	Graphics::Shader surface_shader;
@@ -167,8 +163,8 @@ int main()
 
 	/* generate frame buffer */
 	Graphics::FrameBuffer test_buffer(2);
-	unsigned int text_buffer_channels[] = { TEX_RGBA, TEX_RGBA };
-	test_buffer.Create(20, 14, text_buffer_channels);
+	unsigned int text_buffer_channels[] = { TEX_RGBA, TEX_R_UI };
+	test_buffer.Create(1024, 768, text_buffer_channels);
 
 	ui.SetFolderImgRes(surface_texture.GetId());
 	ui.SetMainFrameBuffer(test_buffer.GetTexture(0)->GetId());
@@ -187,56 +183,9 @@ int main()
 		window.StartOfFrame();
 		renderer.StartOfFrame();
 		ui.StartOfFrame(window.GetWidth(), window.GetHeight(), fps);
+		ui.Update(dt);
 
 		test_buffer.Clear();
-
-		if(ui.GetFocusedWindow() == "Display")
-		{
-			/* rotate by mouse drag */
-			if(window.IsMousePressed(GLFW_MOUSE_BUTTON_LEFT))
-			{
-				renderer.GetDefaultCamera()->RotateHorizontal(CAMERA_ROTATE_SPEED * (window.GetMouseX() - window.GetPreviousMouseX()));
-				renderer.GetDefaultCamera()->RotateVertical(CAMERA_ROTATE_SPEED * (window.GetMouseY() - window.GetPreviousMouseY()));
-			}
-
-			/* scrolling moves the camera in and out */
-			double camera_distance = renderer.GetDefaultCamera()->GetPositionCenterDistance();
-			double camera_zoom_amount = CAMERA_ZOOM_SPEED * renderer.GetDefaultCamera()->GetPositionCenterDistance();
-			renderer.GetDefaultCamera()->MoveForward(window.GetDeltaScrollPosition() * camera_zoom_amount, false);
-
-			// wasd movements
-			if(window.IsKeyPressed(GLFW_KEY_A) || window.IsKeyPressed(GLFW_KEY_LEFT))
-			{
-				renderer.GetDefaultCamera()->MoveRight(-CAMERA_MOVEMENT_SPEED * camera_distance * dt);
-			}
-			if(window.IsKeyPressed(GLFW_KEY_D) || window.IsKeyPressed(GLFW_KEY_RIGHT))
-			{
-				renderer.GetDefaultCamera()->MoveRight(CAMERA_MOVEMENT_SPEED * camera_distance * dt);
-			}
-			if(window.IsKeyPressed(GLFW_KEY_LEFT_SHIFT) || window.IsKeyPressed(GLFW_KEY_RIGHT_SHIFT))
-			{
-				if(window.IsKeyPressed(GLFW_KEY_W) || window.IsKeyPressed(GLFW_KEY_UP))
-				{
-					renderer.GetDefaultCamera()->MoveCenterAndPosition(0, CAMERA_MOVEMENT_SPEED * camera_distance * dt, 0);
-				}
-				if(window.IsKeyPressed(GLFW_KEY_S) || window.IsKeyPressed(GLFW_KEY_DOWN))
-				{
-					renderer.GetDefaultCamera()->MoveCenterAndPosition(0, -CAMERA_MOVEMENT_SPEED * camera_distance * dt, 0);
-				}
-			} else {
-				if(window.IsKeyPressed(GLFW_KEY_W) || window.IsKeyPressed(GLFW_KEY_UP))
-				{
-					renderer.GetDefaultCamera()->MoveForwardXZPlane(CAMERA_MOVEMENT_SPEED * camera_distance * dt);
-				}
-				if(window.IsKeyPressed(GLFW_KEY_S) || window.IsKeyPressed(GLFW_KEY_DOWN))
-				{
-					renderer.GetDefaultCamera()->MoveForwardXZPlane(-CAMERA_MOVEMENT_SPEED * camera_distance * dt);
-				}
-				
-			}
-			
-			renderer.GetDefaultCamera()->Update();
-		}
 
 		float* camera_pos = const_cast<float*>(glm::value_ptr(renderer.GetDefaultCamera()->GetPosition()));
 		camera_position.SetData(camera_pos);
@@ -295,26 +244,18 @@ int main()
 		//renderer.BindDefaultFrameBuffer();
 		renderer.BindFrameBuffer(test_buffer);
 		renderer.BindShader(surface_shader);
-		//renderer.DrawPolygons(surface_x_sample_count * surface_z_sample_count * 6, surface_vertices, counter, surface_indices);
 		shape_cache.RenderShapes(renderer);
 		renderer.DrawPolygons(24, lookat_vertices, 6, lookat_indices);
-		
-		/*renderer.BindDefaultFrameBuffer();
-		renderer.Fill(255, 255, 0);
-		renderer.DrawImage(*test_buffer.GetTexture(), -10, -10, 20, 20);*/
 
 		renderer.BindDefaultFrameBuffer();
 		ui.DisplayUI();
 
 		// read pixels
-		//std::cout << test_buffer.ReadPixel(1, 100, 100) << std::endl;
-		test_buffer.ReadPixel(1, 100, 100);
+		//std::cout << test_buffer.ReadPixel(1, 0, 0) << std::endl;
 
 		renderer.EndOfFrame();
 
 		ui.EndOfFrame();
-
-		//std::cout << renderer.GetDrawCallCount() << std::endl;
 
 		window.EndOfFrame();
 	}
