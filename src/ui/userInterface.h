@@ -14,6 +14,7 @@
 #include "../geometryCache/geometryCache.h"
 #include "../graphics/window.h"
 #include "../graphics/render.h"
+#include "../graphics/opengl/frameBuffer.h"
 
 #define CAMERA_ROTATE_SPEED 0.005
 #define CAMERA_ZOOM_SPEED 0.1
@@ -39,6 +40,9 @@ namespace UI
             /* rendering window stuff */
             ImVec2 m_renderWindowSize;
             ImVec2 m_renderWindowPosition;
+
+            /* different buffers */
+            Graphics::FrameBuffer* m_geometryBuffer;
 
             /* align the different tabs */
             unsigned int m_toolsWidth;
@@ -73,6 +77,7 @@ namespace UI
             void DisplayUI();
 
             void AddShapeCache(GeometryCache::ShapesCache& _cache) { m_shapeCache = &_cache; };
+            void SetGBuffer(Graphics::FrameBuffer* _buffer) { m_geometryBuffer = _buffer; };
 
             void SetFolderImgRes(unsigned int _textureId) { m_folderImageRes = _textureId; };
             void SetMainFrameBuffer(unsigned int _frameBuffer) { m_mainFramebuffer = _frameBuffer; };

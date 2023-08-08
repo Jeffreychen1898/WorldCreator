@@ -83,12 +83,25 @@ namespace UI
             m_renderWindowPosition.y = 0.f;
         }
 
-        std::cout << m_renderWindowPosition.x << " : " << m_renderWindowPosition.y << std::endl;
         /* display image */
         ImGui::SetCursorPos(ImVec2(m_renderWindowPosition.x, m_renderWindowPosition.y));
         ImGui::Image(reinterpret_cast<void*>(m_mainFramebuffer), ImVec2(m_renderWindowSize.x, m_renderWindowSize.y), ImVec2(0, 1), ImVec2(1, 0));
-        ImGui::End();
 
+        /* calculate the mouse position on this window */
+        ImVec2 imgui_mouse = ImGui::GetMousePos();
+        ImVec2 render_window_position = ImGui::GetWindowPos();
+        ImVec2 render_window_mouse = ImVec2(
+            imgui_mouse.x - render_window_position.x - m_renderWindowPosition.x,
+            imgui_mouse.y - render_window_position.y - m_renderWindowPosition.y
+        );
+
+        render_window_mouse.x = 1024.0 * (render_window_mouse.x / m_renderWindowSize.x);
+        render_window_mouse.y = 768.0 * (render_window_mouse.y / m_renderWindowSize.y);
+
+        unsigned int pixel_value = m_geometryBuffer->ReadPixel(1, render_window_mouse.x, 768 - render_window_mouse.y);
+        std::cout << pixel_value << std::endl;
+
+        ImGui::End();
         ImGui::PopStyleVar();
     }
 

@@ -168,6 +168,7 @@ int main()
 
 	ui.SetFolderImgRes(surface_texture.GetId());
 	ui.SetMainFrameBuffer(test_buffer.GetTexture(0)->GetId());
+	ui.SetGBuffer(&test_buffer);
 
 	renderer.BindDefaultShader();
 

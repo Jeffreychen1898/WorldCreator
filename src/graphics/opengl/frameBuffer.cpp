@@ -46,6 +46,9 @@ namespace Graphics
 
     int FrameBuffer::ReadPixel(unsigned int _attachment, unsigned int _x, unsigned int _y)
     {
+        if(_x < 0 || _x >= m_width || _y < 0 || _y >= m_height)
+            return 0;
+            
         m_textures[_attachment]->Bind(0);
         int data[m_width * m_height];
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RED_INTEGER, GL_INT, data);
