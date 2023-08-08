@@ -1,13 +1,16 @@
 #version 330 core
 
-varying vec3 v_position;
-varying vec3 v_normal;
-varying float v_gamma;
-varying float v_exposure;
-varying float v_intensity;
-varying vec3 v_sunColor;
-varying vec3 v_sunPosition;
-varying vec3 v_cameraPosition;
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out uint Id;
+
+in vec3 v_position;
+in vec3 v_normal;
+in float v_gamma;
+in float v_exposure;
+in float v_intensity;
+in vec3 v_sunColor;
+in vec3 v_sunPosition;
+in vec3 v_cameraPosition;
 
 #define PI 3.1415926535
 #define EP 0.0000000001
@@ -82,5 +85,6 @@ void main()
 	
 	vec3 gamma_corrected = pow(tone_mapped, vec3(1.0 / v_gamma));
 	
-	gl_FragColor = vec4(gamma_corrected, 1.0);
+	FragColor = vec4(gamma_corrected, 1.0);
+	Id = 1u;
 }

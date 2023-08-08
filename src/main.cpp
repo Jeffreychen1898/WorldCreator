@@ -166,11 +166,12 @@ int main()
 	lookat_indices[5] = 3;
 
 	/* generate frame buffer */
-	Graphics::FrameBuffer test_buffer(4);
-	test_buffer.Create(1024, 768);
+	Graphics::FrameBuffer test_buffer(2);
+	unsigned int text_buffer_channels[] = { TEX_RGBA, TEX_RGBA };
+	test_buffer.Create(20, 14, text_buffer_channels);
 
 	ui.SetFolderImgRes(surface_texture.GetId());
-	ui.SetMainFrameBuffer(test_buffer.GetTexture()->GetId());
+	ui.SetMainFrameBuffer(test_buffer.GetTexture(0)->GetId());
 
 	renderer.BindDefaultShader();
 
@@ -304,6 +305,10 @@ int main()
 
 		renderer.BindDefaultFrameBuffer();
 		ui.DisplayUI();
+
+		// read pixels
+		//std::cout << test_buffer.ReadPixel(1, 100, 100) << std::endl;
+		test_buffer.ReadPixel(1, 100, 100);
 
 		renderer.EndOfFrame();
 

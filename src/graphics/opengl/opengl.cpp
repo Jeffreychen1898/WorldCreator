@@ -37,6 +37,8 @@ namespace Graphics
         shader_program->AttributeData(vertex_count, _verticesArray.GetVerticesData());
 		shader_program->IndexBufferData(_verticesArray.GetIndicesCount(), _verticesArray.GetIndicesData());
 
+        GLenum draw_buffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+        glDrawBuffers(2, draw_buffers);
         glDrawElements(GL_TRIANGLES, _verticesArray.GetIndicesCount(), GL_UNSIGNED_INT, 0);
         _verticesArray.Clear();
 

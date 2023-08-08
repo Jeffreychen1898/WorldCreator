@@ -3,21 +3,29 @@
 namespace Graphics
 {
     unsigned int FrameBuffer::s_currentFrameBuffer = 0;
-    FrameBuffer::FrameBuffer(unsigned int _channels)
-        : m_channels(_channels), m_texture(_channels), m_width(0), m_height(0), m_frameBuffer(0), m_renderBuffer(0)
+    FrameBuffer::FrameBuffer(unsigned int _attachments)
+        : m_width(0), m_height(0), m_frameBuffer(0), m_renderBuffer(0), m_attachments(_attachments)
     {
     }
 
-    void FrameBuffer::Create(unsigned int _width, unsigned int _height, unsigned char _textureSettings)
+    void FrameBuffer::Create(unsigned int _width, unsigned int _height, unsigned int _channels[], unsigned char _textureSettings)
     {
         /* create the frame buffer */
         glGenFramebuffers(1, &m_frameBuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
 
         /* create the texture */
-        m_texture.Create(m_channels, _width, _height, nullptr, _textureSettings);
-
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture.GetId(), 0);
+        GLenum attachments_[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+        for(unsigned int i=0;i<m_attachments;++i)
+        {
+            Graphics::Texture* each_texture = new Graphics::Texture(_channels[i]);
+            each_texture->Create(_channels[i], _width, _height, nullptr, _textureSettings);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, attachments_[i], GL_TEXTURE_2D, each_texture->GetId(), 0);
+            std::cout << _width << " : " << _height << " : " << _channels[i] << std::endl;
+            m_textures.push_back(each_texture);
+        }
+        /*for(unsigned int i=0;i<m_textures.size();++i)
+            std::cout << m_textures[i]->GetId() << std::endl;*/
 
         /* create the render buffer */
         glGenRenderbuffers(1, &m_renderBuffer);
@@ -34,6 +42,20 @@ namespace Graphics
         m_height = _height;
 
         s_currentFrameBuffer = m_frameBuffer;
+    }
+
+    int FrameBuffer::ReadPixel(unsigned int _attachment, unsigned int _x, unsigned int _y)
+    {
+        m_textures[_attachment]->Bind(0);
+        unsigned int data[m_width * m_height];
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, data);
+
+        for(unsigned int i=0;i<m_width * m_height;++i)
+        {
+            std::cout << data[_y * m_width + _x] << " ";
+        }
+        std::cout << std::endl;
+        return data[_y * m_width + _x];
     }
 
     void FrameBuffer::Clear()

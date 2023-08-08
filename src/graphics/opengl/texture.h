@@ -16,6 +16,16 @@
 
 #define TEX_SETTING_DEFAULT 0xC0       // 1100 0000
 
+// texture format
+#define TEX_R 1
+#define TEX_RG 2
+#define TEX_RGB 3
+#define TEX_RGBA 4
+#define TEX_R_UI 5
+#define TEX_RG_UI 6
+#define TEX_RGB_UI 7
+#define TEX_RGBA_UI 8
+
 namespace Graphics {
     class Texture {
         private:

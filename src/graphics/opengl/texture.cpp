@@ -25,34 +25,58 @@ namespace Graphics {
 
         GLenum internal_format = GL_RGBA8;
         switch(m_textureChannels) {
-            case 1:
+            case TEX_R:
                 internal_format = GL_R8;
                 break;
-            case 2:
+            case TEX_RG:
                 internal_format = GL_RG8;
                 break;
-            case 3:
+            case TEX_RGB:
                 internal_format = GL_RGB8;
                 break;
-            case 4:
+            case TEX_RGBA:
                 internal_format = GL_RGBA8;
+                break;
+            case TEX_R_UI:
+                internal_format = GL_R32UI;
+                break;
+            case TEX_RG_UI:
+                internal_format = GL_RG32UI;
+                break;
+            case TEX_RGB_UI:
+                internal_format = GL_RGB32UI;
+                break;
+            case TEX_RGBA_UI:
+                internal_format = GL_RGBA32UI;
                 break;
         }
 
         GLenum data_format = GL_RED;
         switch(_inputChannels) {
-            case 1:
+            case TEX_R:
                 data_format = GL_RED;
                 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
                 break;
-            case 2:
+            case TEX_RG:
                 data_format = GL_RG;
                 break;
-            case 3:
+            case TEX_RGB:
                 data_format = GL_RGB;
                 break;
-            case 4:
+            case TEX_RGBA:
                 data_format = GL_RGBA;
+                break;
+            case TEX_R_UI:
+                data_format = GL_RED_INTEGER;
+                break;
+            case TEX_RG_UI:
+                data_format = GL_RG_INTEGER;
+                break;
+            case TEX_RGB_UI:
+                data_format = GL_RGB_INTEGER;
+                break;
+            case TEX_RGBA_UI:
+                data_format = GL_RGBA_INTEGER;
                 break;
         }
 
