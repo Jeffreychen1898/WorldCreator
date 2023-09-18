@@ -2,18 +2,22 @@
 
 #include <cmath>
 #include <iostream>
+#include <list>
 
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
 #include "../utils/helperFunctions.h"
+#include "popups/popups.h"
 
 namespace UI
 {
     class UITools
     {
         private:
+            UI::PopupHandler* m_popupHandler;
+
             float m_gammaCorrection;
             float m_exposure;
 
@@ -27,6 +31,8 @@ namespace UI
             UITools();
             ~UITools();
 
+            void Init(UI::PopupHandler* _popupHandler);
+
             void DisplayUI(float _fps);
 
             float GetSunPositionX() const { return std::sin(Utils::ToRad(m_sunAngleTheta)) * std::cos(Utils::ToRad(m_sunAnglePhi)) * m_sunDistance; };
@@ -38,5 +44,8 @@ namespace UI
             float GetSunIntensity() const { return m_sunIntensity; };
             float GetGammaCorrection() const { return m_gammaCorrection; };
             float GetExposure() const { return m_exposure; };
+
+        private:
+            void TriggerNewPerlinNoisePopup();
     };
 }

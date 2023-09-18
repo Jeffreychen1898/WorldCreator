@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <list>
 
 #include <glad.h>
 #include <GLFW/glfw3.h>
@@ -9,7 +10,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-#include "popupUI.h"
+#include "popups/popups.h"
 #include "uiTools.h"
 #include "../geometryCache/geometryCache.h"
 #include "../graphics/window.h"
@@ -28,8 +29,6 @@ namespace UI
             unsigned int m_windowWidth;
             unsigned int m_windowHeight;
             float m_fps;
-
-            UI::PopupUI m_popupUI;
 
             GeometryCache::ShapesCache* m_shapeCache;
             float m_rotateX, m_rotateY, m_rotateZ;
@@ -66,6 +65,9 @@ namespace UI
 
             /* call the different classes to handle each tab */
             UI::UITools m_uiTools;
+
+            /* track list of popups */
+            UI::PopupHandler* m_popupHandler;
         public:
             UserInterface();
             ~UserInterface();

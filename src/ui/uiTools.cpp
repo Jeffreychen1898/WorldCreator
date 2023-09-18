@@ -3,10 +3,15 @@
 namespace UI
 {
     UITools::UITools()
-        : m_gammaCorrection(2.2), m_exposure(1), m_sunDistance(1000), m_sunAnglePhi(0), m_sunAngleTheta(0.f), m_sunIntensity(1)
+        : m_gammaCorrection(2.2), m_exposure(1), m_sunDistance(1000), m_sunAnglePhi(0), m_sunAngleTheta(0.f), m_sunIntensity(1), m_popupHandler(nullptr)
     {
         for(unsigned int i=0;i<3;++i)
             m_sunColor[i] = 1.f;
+    }
+
+    void UITools::Init(UI::PopupHandler* _popupHandler)
+    {
+        m_popupHandler = _popupHandler;
     }
 
     void UITools::DisplayUI(float _fps)
@@ -49,12 +54,23 @@ namespace UI
             ImGui::Text("\tZoom Speed Curve");
         }
 
-        if(ImGui::CollapsingHeader("Shapes"))
+        if(ImGui::CollapsingHeader("New Object"))
         {
-            ImGui::Button("Surface");
-            ImGui::Button("Cube");
-            ImGui::Button("Sphere");
+            ImGui::Text("Shapes");
+            ImGui::Button("Plane");
+            ImGui::Text("Value 2D");
+            if(ImGui::Button("Perlin Noise")) {
+                // trigger popup
+                //std::cout << "Trigger popup" << std::endl;
+                m_popupHandler->InitPerlinNoisePopup();
+            }
+            ImGui::Text("Functions");
+            ImGui::Button("Functions");
         }
+    }
+
+    void UITools::TriggerNewPerlinNoisePopup() {
+        //ImGui::Begin();
     }
 
     UITools::~UITools()

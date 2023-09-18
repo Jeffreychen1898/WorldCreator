@@ -4,7 +4,7 @@ namespace UI
 {
     UserInterface::UserInterface()
         : m_mainFrameBufferAspectRatio(1024.f / 768.f), m_toolsWidth(300), m_propertiesWidth(300), m_isPropertiesWidthSet(false),
-        m_isToolsWidthSet(false), m_isResHeightSet(false), m_resHeight(300), m_folderImageRes(0), m_fps(0)
+        m_isToolsWidthSet(false), m_isResHeightSet(false), m_resHeight(300), m_folderImageRes(0), m_fps(0), m_popupHandler(nullptr)
     {
         m_mainWindowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus;
         m_windowFocused = "";
@@ -15,6 +15,7 @@ namespace UI
 
         m_renderWindowSize = ImVec2(0, 0);
         m_renderWindowPosition = ImVec2(0, 0);
+        m_popupHandler = new UI::PopupHandler();
     }
 
     void UserInterface::Init(Graphics::Window* _window, Graphics::Renderer* _renderer, const char* _glslVersion)
@@ -23,6 +24,8 @@ namespace UI
 	    ImGui_ImplGlfw_InitForOpenGL(_window->GetWindow(), true);
 	    ImGui_ImplOpenGL3_Init(_glslVersion);
 	    ImGui::StyleColorsDark();
+
+        m_uiTools.Init(m_popupHandler);
 
         m_window = _window;
         m_renderer = _renderer;
@@ -50,6 +53,7 @@ namespace UI
         DisplayRenderWindow();
         DisplayResWindow();
 
+        m_popupHandler->RenderPopups();
 		//ImGui::ShowDemoWindow();
     }
 
@@ -99,7 +103,7 @@ namespace UI
         render_window_mouse.y = 768.0 * (render_window_mouse.y / m_renderWindowSize.y);
 
         unsigned int pixel_value = m_geometryBuffer->ReadPixel(1, render_window_mouse.x, 768 - render_window_mouse.y);
-        std::cout << pixel_value << std::endl;
+        //std::cout << pixel_value << std::endl;
 
         ImGui::End();
         ImGui::PopStyleVar();
@@ -286,6 +290,8 @@ namespace UI
 
     UserInterface::~UserInterface()
     {
+        delete m_popupHandler;
+        
         ImGui_ImplOpenGL3_Shutdown();
 	    ImGui_ImplGlfw_Shutdown();
 	    ImGui::DestroyContext();
