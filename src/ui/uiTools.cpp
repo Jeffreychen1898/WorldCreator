@@ -3,23 +3,17 @@
 namespace UI
 {
     UITools::UITools()
-        : m_gammaCorrection(2.2), m_exposure(1), m_sunDistance(1000), m_sunAnglePhi(0), m_sunAngleTheta(0.f), m_sunIntensity(1), m_popupHandler(nullptr)
+        : m_gammaCorrection(2.2), m_exposure(1), m_sunDistance(1000), m_sunAnglePhi(0), m_sunAngleTheta(0.f), m_sunIntensity(1)
     {
         for(unsigned int i=0;i<3;++i)
             m_sunColor[i] = 1.f;
-    }
-
-    void UITools::Init(UI::PopupHandler* _popupHandler)
-    {
-        m_popupHandler = _popupHandler;
     }
 
     void UITools::DisplayUI(float _fps)
     {
         ImGuiStyle& imgui_style = ImGui::GetStyle();
 
-        std::string frame_rate_string = "Frame Rate: " + std::to_string(_fps);
-        ImGui::Text(frame_rate_string.c_str());
+        ImGui::Text("Frame Rate: %f", _fps);
 
         if(ImGui::CollapsingHeader("Rendering"))
         {
@@ -61,8 +55,7 @@ namespace UI
             ImGui::Text("Value 2D");
             if(ImGui::Button("Perlin Noise")) {
                 // trigger popup
-                //std::cout << "Trigger popup" << std::endl;
-                m_popupHandler->InitPerlinNoisePopup();
+                UI::Resource::PerlinNoise_Popup();
             }
             ImGui::Text("Functions");
             ImGui::Button("Functions");

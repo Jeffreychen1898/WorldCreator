@@ -28,9 +28,6 @@ target_link_libraries(${PROJECT_NAME} UI)
 target_link_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src/geometryCache)
 target_link_libraries(${PROJECT_NAME} GeometryCache)
 
-target_link_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src/ui/popups)
-target_link_libraries(${PROJECT_NAME} Popups)
-
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}/deps/imgui
 )

@@ -10,12 +10,13 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-#include "popups/popups.h"
 #include "uiTools.h"
 #include "../geometryCache/geometryCache.h"
 #include "../graphics/window.h"
 #include "../graphics/render.h"
 #include "../graphics/opengl/frameBuffer.h"
+
+#include "noiseHandler.h"
 
 #define CAMERA_ROTATE_SPEED 0.005
 #define CAMERA_ZOOM_SPEED 0.1
@@ -65,9 +66,6 @@ namespace UI
 
             /* call the different classes to handle each tab */
             UI::UITools m_uiTools;
-
-            /* track list of popups */
-            UI::PopupHandler* m_popupHandler;
         public:
             UserInterface();
             ~UserInterface();

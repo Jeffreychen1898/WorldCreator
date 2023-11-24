@@ -9,15 +9,13 @@
 #include <imgui_impl_opengl3.h>
 
 #include "../utils/helperFunctions.h"
-#include "popups/popups.h"
+#include "noiseHandler.h"
 
 namespace UI
 {
     class UITools
     {
         private:
-            UI::PopupHandler* m_popupHandler;
-
             float m_gammaCorrection;
             float m_exposure;
 
@@ -30,8 +28,6 @@ namespace UI
         public:
             UITools();
             ~UITools();
-
-            void Init(UI::PopupHandler* _popupHandler);
 
             void DisplayUI(float _fps);
 
