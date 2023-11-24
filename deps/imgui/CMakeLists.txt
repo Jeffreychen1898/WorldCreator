@@ -1,9 +1,0 @@
-add_library(Imgui
-    imgui_draw.cpp
-    imgui_demo.cpp
-    imgui_tables.cpp
-    imgui_widgets.cpp
-    imgui.cpp
-    imgui_impl_glfw.cpp
-    imgui_impl_opengl3.cpp
-)

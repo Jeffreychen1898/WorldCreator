@@ -1,3 +1,6 @@
 .git/**
+obj/**
+./imgui.ini
+./WorldCreator
 build/**
 !.gitignore
