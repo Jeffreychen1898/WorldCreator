@@ -22,6 +22,8 @@
 #include "utils/helperFunctions.h"
 #include "utils/performance.h"
 #include "geometryCache/geometryCache.h"
+#include "storage/storage.hpp"
+#include "storage/object3d.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -173,6 +175,9 @@ int main()
 	renderer.BindDefaultShader();
 
 	Utils::Performance timer;
+
+	std::string plane_name = "Test";
+	Storage::CreatePlane(plane_name, 200, 200, 5, 5);
 
 	while(window.IsOpen())
 	{
