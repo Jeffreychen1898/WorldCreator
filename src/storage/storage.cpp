@@ -65,12 +65,12 @@ namespace Storage
             for(int j=0;j<_sectionX;++j)
             {
                 unsigned int get_index = i * _sectionX + j;
-                object_indices[get_index * 6 + 0] = _sectionX * i + j;
-                object_indices[get_index * 6 + 1] = _sectionX * i + j + 1;
-                object_indices[get_index * 6 + 2] = _sectionX * (i + 1) + j + 1;
-                object_indices[get_index * 6 + 3] = _sectionX * i + j;
-                object_indices[get_index * 6 + 4] = _sectionX * (i + 1) + j + 1;
-                object_indices[get_index * 6 + 5] = _sectionX * (i + 1) + j;
+                object_indices[get_index * 6 + 0] = vertex_x_count * i + j;
+                object_indices[get_index * 6 + 1] = vertex_x_count * i + j + 1;
+                object_indices[get_index * 6 + 2] = vertex_x_count * (i + 1) + j + 1;
+                object_indices[get_index * 6 + 3] = vertex_x_count * i + j;
+                object_indices[get_index * 6 + 4] = vertex_x_count * (i + 1) + j + 1;
+                object_indices[get_index * 6 + 5] = vertex_x_count * (i + 1) + j;
             }
         }
 
