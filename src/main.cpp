@@ -252,7 +252,7 @@ int main()
 		renderer.BindFrameBuffer(test_buffer);
 		renderer.BindShader(surface_shader);
 		// shape_cache.RenderShapes(renderer);
-		renderer.DrawPolygons(24, lookat_vertices, 6, lookat_indices);
+		//renderer.DrawPolygons(24, lookat_vertices, 6, lookat_indices);
 
 		renderer.BindDefaultFrameBuffer();
 		ui.DisplayUI();
