@@ -30,8 +30,8 @@ namespace Storage
         float section_width = _width / _sectionX;
         float section_height = _height / _sectionY;
 
-        float vertex_x_count = _sectionX + 1;
-        float vertex_y_count = _sectionY + 1;
+        int vertex_x_count = _sectionX + 1;
+        int vertex_y_count = _sectionY + 1;
 
         float* object_vertices = new float[vertex_x_count * vertex_y_count * 3];
         float* shift_vectors = new float[vertex_x_count * vertex_y_count * 3];
