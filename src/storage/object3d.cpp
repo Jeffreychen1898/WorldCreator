@@ -28,6 +28,13 @@ namespace Storage
         memcpy(m_shiftVectors, _shiftVectors, sizeof(float) * _verticesCount);
         memcpy(m_indices, _indices, sizeof(unsigned int) * _indicesCount);
 
+        std::cout << "vertices\n";
+        for(int i=0;i<_verticesCount;++i)
+            std::cout << m_vertices[i] << "\n";
+        std::cout << "indices\n";
+        for(int i=0;i<_indicesCount;++i)
+            std::cout << m_indices[i] << "\n";
+
         CalculateNormals();
     }
 

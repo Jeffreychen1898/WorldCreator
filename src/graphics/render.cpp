@@ -93,6 +93,7 @@ namespace Graphics
 		for(const auto object : objects)
 		{
 			DrawPolygons(object->GetVertexCount(), object->GetVertices(), object->GetIndicesCount(), object->GetIndices());
+			std::cout << "asdfasdf" << std::endl;
 		}
 	}
 

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <cstring>
+#include <iostream>
 
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
