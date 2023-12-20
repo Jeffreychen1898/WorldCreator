@@ -111,12 +111,6 @@ namespace Graphics
 
 	void Renderer::DrawPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices)
 	{
-		std::cout << "vertices\n";
-		for(unsigned int i=0;i<_vertexSize;++i)
-			std::cout << _vertices[i] << "\n";
-		std::cout << "indices\n";
-		for(unsigned int i=0;i<_indicesCount;++i)
-			std::cout << _indices[i] << "\n";
 		// could be more optimized
 		// units for load is in number of triangles
 		unsigned int vertex_size = m_verticesArray.GetVertexSize();

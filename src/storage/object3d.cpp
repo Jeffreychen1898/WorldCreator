@@ -28,13 +28,6 @@ namespace Storage
         memcpy(m_shiftVectors, _shiftVectors, sizeof(float) * _verticesCount);
         memcpy(m_indices, _indices, sizeof(unsigned int) * _indicesCount);
 
-        std::cout << "vertices\n";
-        for(int i=0;i<_verticesCount;++i)
-            std::cout << m_vertices[i] << "\n";
-        std::cout << "indices\n";
-        for(int i=0;i<_indicesCount;++i)
-            std::cout << m_indices[i] << "\n";
-
         //CalculateNormals();
     }
 
@@ -70,9 +63,9 @@ namespace Storage
             glm::vec3 to_vertex_three = vertex_three_position - vertex_one_position;
             glm::vec3 normal_vector = glm::normalize(glm::cross(to_vertex_three, to_vertex_two));
 
-            SetNormalVector(m_vertices + 3 * vertex_one_idx, normal_vector, vertex_normal_count[vertex_one_idx]);
-            SetNormalVector(m_vertices + 3 * vertex_two_idx, normal_vector, vertex_normal_count[vertex_two_idx]);
-            SetNormalVector(m_vertices + 3 * vertex_three_idx, normal_vector, vertex_normal_count[vertex_three_idx]);
+            SetNormalVector(m_normals + 3 * vertex_one_idx, normal_vector, vertex_normal_count[vertex_one_idx]);
+            SetNormalVector(m_normals + 3 * vertex_two_idx, normal_vector, vertex_normal_count[vertex_two_idx]);
+            SetNormalVector(m_normals + 3 * vertex_three_idx, normal_vector, vertex_normal_count[vertex_three_idx]);
 
             ++ vertex_normal_count[vertex_one_idx];
             ++ vertex_normal_count[vertex_two_idx];

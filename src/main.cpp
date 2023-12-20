@@ -267,7 +267,6 @@ int main()
 		ui.EndOfFrame();
 
 		window.EndOfFrame();
-		return 1;
 	}
 
 	Utils::HelperClose();
