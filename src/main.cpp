@@ -82,7 +82,7 @@ int main()
 	surface_shader.AttachUniform("u_cameraPosition", camera_position);
 	//camera_position.SetData(camera_position_raw);
 
-	/*GeometryCache::ShapesCache shape_cache;
+	GeometryCache::ShapesCache shape_cache;
 	// create a texture to display perlin noise
 	unsigned int surface_x_sample_count = 100;
 	unsigned int surface_z_sample_count = 100;
@@ -97,7 +97,7 @@ int main()
 	surface_texture.Create(1, surface_x_sample_count, surface_z_sample_count, texture_data, TEX_MAG_NEAREST);
 
 	// generate the vertices of the surface
-	float* surface_vertices = new float[surface_x_sample_count * surface_z_sample_count * 6];
+	/*float* surface_vertices = new float[surface_x_sample_count * surface_z_sample_count * 6];
 	for(unsigned int i=0;i<surface_z_sample_count;++i)
 	{
 		for(unsigned int j=0;j<surface_x_sample_count;++j)
@@ -245,7 +245,7 @@ int main()
 		//renderer.BindDefaultFrameBuffer();
 		renderer.BindFrameBuffer(test_buffer);
 		renderer.BindShader(surface_shader);
-		shape_cache.RenderShapes(renderer);
+		// shape_cache.RenderShapes(renderer);
 		renderer.DrawPolygons(24, lookat_vertices, 6, lookat_indices);
 
 		renderer.BindDefaultFrameBuffer();
@@ -262,8 +262,8 @@ int main()
 	}
 
 	Utils::HelperClose();
-	delete[] surface_vertices;
-	delete[] surface_indices;
+	//delete[] surface_vertices;
+	//delete[] surface_indices;
 	delete[] lookat_vertices;
 	delete[] lookat_indices;
 
