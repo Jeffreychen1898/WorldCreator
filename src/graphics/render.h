@@ -5,6 +5,7 @@
 #include <string>
 #include <cmath>
 #include <unordered_map>
+#include <list>
 
 #include <glad.h>
 #include <GLFW/glfw3.h>
@@ -18,6 +19,8 @@
 #include "camera.h"
 #include "opengl/texture.h"
 #include "opengl/frameBuffer.h"
+#include "../storage/storage.hpp"
+#include "../storage/object3d.hpp"
 
 namespace Graphics
 {
@@ -71,6 +74,8 @@ namespace Graphics
             void DrawImage(Graphics::Texture& _texture, float _x, float _y, float _width, float _height);
             void DrawPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices);
             void DrawSmallPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices);
+
+            void RenderObject3DPolygon();
 
             unsigned int GetDrawCallCount() const { return m_drawCallCount; };
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <list>
 #include <string>
 #include <unordered_map>
 
@@ -19,6 +20,7 @@ namespace Storage
 
     Object3D* GetObject(std::string& _name);
     Graphics::Texture* GetTexture(std::string& _name);
+    void GetObjectsList(std::list<Object3D*>& _list);
 
     void CreatePlane(std::string& _name, float _width, float _height,
     unsigned int _sectionX, unsigned int _sectionY);

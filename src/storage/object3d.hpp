@@ -29,6 +29,11 @@ namespace Storage
 
             void SetObject3D(float* _vertices, float* _shiftVectors, unsigned int* _indices,
             unsigned int _verticesCount, unsigned int _indicesCount);
+
+            float* GetVertices() { return m_vertices; };
+            unsigned int* GetIndices() { return m_indices; };
+            unsigned int GetVertexCount() const { return m_verticesCount; };
+            unsigned int GetIndicesCount() const { return m_indicesCount; };
         
         private:
             void CalculateNormals();

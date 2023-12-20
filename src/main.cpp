@@ -257,6 +257,8 @@ int main()
 		renderer.BindDefaultFrameBuffer();
 		ui.DisplayUI();
 
+		renderer.RenderObject3DPolygon();
+
 		// read pixels
 		//std::cout << test_buffer.ReadPixel(1, 0, 0) << std::endl;
 

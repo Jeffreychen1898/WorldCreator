@@ -19,6 +19,12 @@ namespace Storage
         return find_texture->second;
     }
 
+    void GetObjectsList(std::list<Object3D*>& _list)
+    {
+        for(auto it = m_objects->begin(); it != m_objects->end(); ++it)
+            _list.push_back(it->second);
+    }
+
     void CreatePlane(std::string& _name, float _width, float _height,
     unsigned int _sectionX, unsigned int _sectionY)
     {

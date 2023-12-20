@@ -85,6 +85,17 @@ namespace Graphics
 		Graphics::FrameBuffer::BindDefault();
 	}
 
+	void Renderer::RenderObject3DPolygon()
+	{
+		std::list<Storage::Object3D*> objects;
+		Storage::GetObjectsList(objects);
+
+		for(const auto object : objects)
+		{
+			DrawPolygons(object->GetVertexCount(), object->GetVertices(), object->GetIndicesCount(), object->GetIndices());
+		}
+	}
+
 	void Renderer::DrawSmallPolygons(unsigned int _vertexSize, float* _vertices, unsigned int _indicesCount, unsigned int* _indices)
 	{
 		if(_indicesCount < MAX_INDICES && _vertexSize < MAX_VERTEX_SIZE)
