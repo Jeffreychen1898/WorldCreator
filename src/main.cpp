@@ -272,6 +272,7 @@ int main()
 	//delete[] surface_indices;
 	delete[] lookat_vertices;
 	delete[] lookat_indices;
+	Storage::FreeStorage();
 
 	return 0;
 }

@@ -27,7 +27,7 @@ namespace Storage
             return;
         
         // construct the object
-        float section_width = _width / _sectionX;
+        /*float section_width = _width / _sectionX;
         float section_height = _height / _sectionY;
 
         int vertex_x_count = _sectionX + 1;
@@ -75,7 +75,7 @@ namespace Storage
 
         delete[] object_vertices;
         delete[] shift_vectors;
-        delete[] object_indices;
+        delete[] object_indices;*/
     }
 
     void CreateTexture(std::string& _name, unsigned int _channels, unsigned int _width,
