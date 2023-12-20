@@ -82,8 +82,8 @@ int main()
 	surface_shader.AttachUniform("u_cameraPosition", camera_position);
 	//camera_position.SetData(camera_position_raw);
 
-	GeometryCache::ShapesCache shape_cache;
-	/* create a texture to display perlin noise */
+	/*GeometryCache::ShapesCache shape_cache;
+	// create a texture to display perlin noise
 	unsigned int surface_x_sample_count = 100;
 	unsigned int surface_z_sample_count = 100;
 
@@ -96,7 +96,7 @@ int main()
 	Graphics::Texture surface_texture(1);
 	surface_texture.Create(1, surface_x_sample_count, surface_z_sample_count, texture_data, TEX_MAG_NEAREST);
 
-	/* generate the vertices of the surface */
+	// generate the vertices of the surface
 	float* surface_vertices = new float[surface_x_sample_count * surface_z_sample_count * 6];
 	for(unsigned int i=0;i<surface_z_sample_count;++i)
 	{
@@ -129,7 +129,7 @@ int main()
 		}
 	}
 
-	/* generate the indices of the surface */
+	// generate the indices of the surface
 	unsigned int* surface_indices = new unsigned int[2 * (surface_x_sample_count - 1) * (surface_z_sample_count - 1) * 3];
 	for(unsigned int i=0;i<surface_z_sample_count-1;++i)
 	{
@@ -148,9 +148,9 @@ int main()
 	shape_cache.AppendShape("test_shape", surface_x_sample_count * surface_z_sample_count * 6, surface_vertices, cnter, surface_indices);
 	shape_cache.AppendPlane("test_plane", 0, 300, 0);
 
-	ui.AddShapeCache(shape_cache);
+	ui.AddShapeCache(shape_cache);*/
 
-	/* create the cube to mark the lookat position */
+	// create the cube to mark the lookat position
 	float* lookat_vertices = new float[24];
 	unsigned int* lookat_indices = new unsigned int[6];
 
