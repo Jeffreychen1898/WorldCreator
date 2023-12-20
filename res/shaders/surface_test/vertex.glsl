@@ -1,7 +1,6 @@
 #version 330 core
 
 layout(location=1) in vec3 a_position;
-layout(location=2) in vec3 a_normal;
 
 uniform mat4 u_projection;
 uniform float u_gamma;
@@ -23,7 +22,7 @@ varying vec3 v_cameraPosition;
 void main()
 {
 	gl_Position = u_projection * vec4(a_position, 1.0);
-	v_normal = a_normal;
+	v_normal = vec3(0.f, 1.f, 0.f);
 	v_position = a_position;
 	v_gamma = u_gamma;
 	v_exposure = u_exposure;

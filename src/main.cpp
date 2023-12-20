@@ -53,9 +53,9 @@ int main()
 
 	/* create a new shader to handle this surface */
 	Graphics::Shader surface_shader;
-	surface_shader.Create(6, "res/shaders/surface_test/vertex.glsl", "res/shaders/surface_test/fragment.glsl");
+	surface_shader.Create(3, "res/shaders/surface_test/vertex.glsl", "res/shaders/surface_test/fragment.glsl");
 	surface_shader.AddVertexBuffer(1, 3, 0);
-	surface_shader.AddVertexBuffer(2, 3, 3);
+	//surface_shader.AddVertexBuffer(2, 3, 3);
 	renderer.GetDefaultCamera()->AttachShader("u_projection", surface_shader);
 
 	Graphics::FloatContainer gamma_value;
