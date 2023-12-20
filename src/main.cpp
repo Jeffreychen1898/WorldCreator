@@ -178,7 +178,7 @@ int main()
 
 	Storage::InitStorage();
 	std::string plane_name = "Test";
-	Storage::CreatePlane(plane_name, 200, 200, 1, 1);
+	Storage::CreatePlane(plane_name, 200, 200, 5, 5);
 
 	while(window.IsOpen())
 	{
@@ -267,7 +267,6 @@ int main()
 		ui.EndOfFrame();
 
 		window.EndOfFrame();
-		return 1;
 	}
 
 	Utils::HelperClose();
