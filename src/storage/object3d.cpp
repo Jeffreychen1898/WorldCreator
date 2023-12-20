@@ -35,7 +35,7 @@ namespace Storage
         for(int i=0;i<_indicesCount;++i)
             std::cout << m_indices[i] << "\n";
 
-        CalculateNormals();
+        //CalculateNormals();
     }
 
     void Object3D::CalculateNormals()
