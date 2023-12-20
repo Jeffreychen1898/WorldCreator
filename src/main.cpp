@@ -267,6 +267,7 @@ int main()
 		ui.EndOfFrame();
 
 		window.EndOfFrame();
+		std::cin;
 	}
 
 	Utils::HelperClose();
