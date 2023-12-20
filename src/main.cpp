@@ -176,6 +176,7 @@ int main()
 
 	Utils::Performance timer;
 
+	Storage::InitStorage();
 	std::string plane_name = "Test";
 	Storage::CreatePlane(plane_name, 200, 200, 5, 5);
 
