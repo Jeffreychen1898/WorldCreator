@@ -253,11 +253,11 @@ int main()
 		renderer.BindShader(surface_shader);
 		// shape_cache.RenderShapes(renderer);
 		//renderer.DrawPolygons(24, lookat_vertices, 6, lookat_indices);
+		renderer.RenderObject3DPolygon();
 
 		renderer.BindDefaultFrameBuffer();
 		ui.DisplayUI();
 
-		renderer.RenderObject3DPolygon();
 
 		// read pixels
 		//std::cout << test_buffer.ReadPixel(1, 0, 0) << std::endl;
