@@ -146,9 +146,9 @@ int main()
 	}
 	unsigned int cnter = (surface_x_sample_count - 1) * (surface_z_sample_count - 1) * 6;
 	shape_cache.AppendShape("test_shape", surface_x_sample_count * surface_z_sample_count * 6, surface_vertices, cnter, surface_indices);
-	shape_cache.AppendPlane("test_plane", 0, 300, 0);
+	shape_cache.AppendPlane("test_plane", 0, 300, 0);*/
 
-	ui.AddShapeCache(shape_cache);*/
+	ui.AddShapeCache(shape_cache);
 
 	// create the cube to mark the lookat position
 	float* lookat_vertices = new float[24];
