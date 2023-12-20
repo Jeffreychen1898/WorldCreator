@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cstring>
 
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
